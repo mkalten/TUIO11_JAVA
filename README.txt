@@ -66,9 +66,9 @@ A TuioListener needs to implement the following methods:
 
 * addTuioBlob(TuioBlob tblob):
   this is called when a new blob is detected
-* updateTuiooBlob(TuioBlob tblob):
+* updateTuioBlob(TuioBlob tblob):
   a blob is moving on the table surface
-* removeTuiooBlob(TuioBlob tblob):
+* removeTuioBlob(TuioBlob tblob):
   a blob was removed from the table
 
 * refresh(TuioTime frameTime):
