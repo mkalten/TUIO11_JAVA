@@ -79,7 +79,7 @@ public class TuioObject extends TuioContainer {
 	public TuioObject (long si, int sym, float xp, float yp, float a) {
 		super(si,xp,yp);
 		symbol_id = sym;
-		angle = angle;
+		angle = a;
 		rotation_speed = 0.0f;
 		rotation_accel = 0.0f;
 	}
