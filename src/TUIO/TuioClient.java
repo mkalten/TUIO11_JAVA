@@ -147,7 +147,9 @@ public class TuioClient implements OSCListener {
 	 * Returns a Vector of all currently active TuioObjects
 	 *
 	 * @return  a Vector of all currently active TuioObjects
+	 * @deprecated use {@link #getTuioObjectList()} instead. 
 	 */
+	@Deprecated
 	public Vector<TuioObject> getTuioObjects() {
 		return new Vector<TuioObject>(objectList.values());
 	}
@@ -165,7 +167,9 @@ public class TuioClient implements OSCListener {
 	 * Returns a Vector of all currently active TuioCursors
 	 *
 	 * @return  a Vector of all currently active TuioCursors
+	 * @deprecated use {@link #getTuioCursorList()} instead.
 	 */
+	@Deprecated
 	public Vector<TuioCursor> getTuioCursors() {
 		return new Vector<TuioCursor>(cursorList.values());
 	}	
@@ -183,7 +187,9 @@ public class TuioClient implements OSCListener {
 	 * Returns a Vector of all currently active TuioBlobs
 	 *
 	 * @return  a Vector of all currently active TuioBlobs
+	 * @deprecated use {@link #getTuioBlobList()} instead.
 	 */
+	@Deprecated
 	public Vector<TuioBlob> getTuioBlobs() {
 		return new Vector<TuioBlob>(blobList.values());
 	}
