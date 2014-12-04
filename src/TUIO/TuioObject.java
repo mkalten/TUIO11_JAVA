@@ -154,7 +154,7 @@ public class TuioObject extends TuioContainer {
 	 * @param	a	the angle coordinate to assign
 	 */
 	public void update (TuioTime ttime, float xp, float yp, float a) {
-		TuioPoint lastPoint = path.lastElement();
+		TuioPoint lastPoint = path.getLast();
 		super.update(ttime,xp,yp);
 
 		TuioTime diffTime = currentTime.subtract(lastPoint.getTuioTime());

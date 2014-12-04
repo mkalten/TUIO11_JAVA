@@ -19,6 +19,7 @@
 package TUIO;
 
 import java.util.*;
+import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  * The abstract TuioContainer class defines common attributes that apply to both subclasses {@link TuioObject} and {@link TuioCursor}.
@@ -51,7 +52,11 @@ abstract class TuioContainer extends TuioPoint {
 	/**
 	 * A Vector of TuioPoints containing all the previous positions of the TUIO component.
 	 */ 
-	protected Vector<TuioPoint> path;
+	protected LinkedBlockingDeque<TuioPoint> path;
+	/**
+	 * Defines the maximum path length.
+	 */ 
+	public static int MAX_PATH_LENGTH = 128;
 	/**
 	 * Defines the ADDED state.
 	 */ 
@@ -95,8 +100,8 @@ abstract class TuioContainer extends TuioPoint {
 		motion_speed = 0.0f;
 		motion_accel = 0.0f;
 		
-		path = new Vector<TuioPoint>();
-		path.addElement(new TuioPoint(currentTime,xpos,ypos));
+		path = new LinkedBlockingDeque<TuioPoint>();
+		path.addLast(new TuioPoint(currentTime,xpos,ypos));
 		state = TUIO_ADDED;
 	}
 	
@@ -117,8 +122,8 @@ abstract class TuioContainer extends TuioPoint {
 		motion_speed = 0.0f;
 		motion_accel = 0.0f;
 		
-		path = new Vector<TuioPoint>();
-		path.addElement(new TuioPoint(currentTime,xpos,ypos));
+		path = new LinkedBlockingDeque<TuioPoint>();
+		path.addLast(new TuioPoint(currentTime,xpos,ypos));
 		state = TUIO_ADDED;
 	}
 	
@@ -137,8 +142,8 @@ abstract class TuioContainer extends TuioPoint {
 		motion_speed = 0.0f;
 		motion_accel = 0.0f;
 		
-		path = new Vector<TuioPoint>();
-		path.addElement(new TuioPoint(currentTime,xpos,ypos));
+		path = new LinkedBlockingDeque<TuioPoint>();
+		path.addLast(new TuioPoint(currentTime,xpos,ypos));
 		state = TUIO_ADDED;
 	}
 	
@@ -152,7 +157,7 @@ abstract class TuioContainer extends TuioPoint {
 	 * @param	yp	the Y coordinate to assign
 	 */
 	public void update(TuioTime ttime, float xp, float yp) {
-		TuioPoint lastPoint = path.lastElement();
+		TuioPoint lastPoint = path.getLast();
 		super.update(ttime,xp,yp);
 		
 		TuioTime diffTime = currentTime.subtract(lastPoint.getTuioTime());
@@ -167,7 +172,9 @@ abstract class TuioContainer extends TuioPoint {
 		this.motion_speed = dist/dt;
 		this.motion_accel = (motion_speed - last_motion_speed)/dt;
 		
-		path.addElement(new TuioPoint(currentTime,xpos,ypos));
+		path.addLast(new TuioPoint(currentTime,xpos,ypos));
+		if (path.size()>MAX_PATH_LENGTH) path.removeFirst();
+		
 		if (motion_accel>0) state = TUIO_ACCELERATING;
 		else if (motion_accel<0) state = TUIO_DECELERATING;
 		else state = TUIO_STOPPED;
@@ -201,7 +208,10 @@ abstract class TuioContainer extends TuioPoint {
 		y_speed = ys;
 		motion_speed = (float)Math.sqrt(x_speed*x_speed+y_speed*y_speed);
 		motion_accel = ma;
-		path.addElement(new TuioPoint(currentTime,xpos,ypos));
+
+		path.addLast(new TuioPoint(currentTime,xpos,ypos));
+		if (path.size()>MAX_PATH_LENGTH) path.removeFirst();
+		
 		if (motion_accel>0) state = TUIO_ACCELERATING;
 		else if (motion_accel<0) state = TUIO_DECELERATING;
 		else state = TUIO_STOPPED;
@@ -223,7 +233,10 @@ abstract class TuioContainer extends TuioPoint {
 		y_speed = ys;
 		motion_speed = (float)Math.sqrt(x_speed*x_speed+y_speed*y_speed);
 		motion_accel = ma;
-		path.addElement(new TuioPoint(currentTime,xpos,ypos));
+
+		path.addLast(new TuioPoint(currentTime,xpos,ypos));
+		if (path.size()>MAX_PATH_LENGTH) path.removeFirst();
+		
 		if (motion_accel>0) state = TUIO_ACCELERATING;
 		else if (motion_accel<0) state = TUIO_DECELERATING;
 		else state = TUIO_STOPPED;
@@ -242,7 +255,10 @@ abstract class TuioContainer extends TuioPoint {
 		y_speed = tcon.getYSpeed();
 		motion_speed = tcon.getMotionSpeed();
 		motion_accel = tcon.getMotionAccel();
-		path.addElement(new TuioPoint(currentTime,xpos,ypos));
+
+		path.addLast(new TuioPoint(currentTime,xpos,ypos));
+		if (path.size()>MAX_PATH_LENGTH) path.removeFirst();
+		
 		if (motion_accel>0) state = TUIO_ACCELERATING;
 		else if (motion_accel<0) state = TUIO_DECELERATING;
 		else state = TUIO_STOPPED;
@@ -297,6 +313,14 @@ abstract class TuioContainer extends TuioPoint {
 	 */
 	public ArrayList<TuioPoint> getPath() {
 		return new ArrayList<TuioPoint>(path);
+	}
+	
+	/**
+	 * Sets the maximum path length
+	 * param	the maximum path length
+	 */
+	public static void setMaxPathLength(int length) {
+		MAX_PATH_LENGTH = length;
 	}
 	
 	/**

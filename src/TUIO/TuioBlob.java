@@ -195,7 +195,7 @@ public class TuioBlob extends TuioContainer {
 	 * @param	f	the area to assign
 	 */
 	public void update (TuioTime ttime, float xp, float yp, float a, float w, float h, float f) {
-		TuioPoint lastPoint = path.lastElement();
+		TuioPoint lastPoint = path.getLast();
 		super.update(ttime,xp,yp);
 		
 		width = w;
