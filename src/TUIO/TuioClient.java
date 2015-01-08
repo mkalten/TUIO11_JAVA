@@ -524,17 +524,17 @@ public class TuioClient implements OSCListener {
 			if (command.equals("set")) {
 				
 				long s_id  = ((Integer)args[1]).longValue();
-				float xpos = ((Float)args[3]).floatValue();
-				float ypos = ((Float)args[4]).floatValue();
-				float angle = ((Float)args[5]).floatValue();
-				float width = ((Float)args[6]).floatValue();
-				float height = ((Float)args[7]).floatValue();
-				float area = ((Float)args[8]).floatValue();
-				float xspeed = ((Float)args[9]).floatValue();
-				float yspeed = ((Float)args[10]).floatValue();
-				float rspeed = ((Float)args[11]).floatValue();
-				float maccel = ((Float)args[12]).floatValue();
-				float raccel = ((Float)args[13]).floatValue();
+				float xpos = ((Float)args[2]).floatValue();
+				float ypos = ((Float)args[3]).floatValue();
+				float angle = ((Float)args[4]).floatValue();
+				float width = ((Float)args[5]).floatValue();
+				float height = ((Float)args[6]).floatValue();
+				float area = ((Float)args[7]).floatValue();
+				float xspeed = ((Float)args[8]).floatValue();
+				float yspeed = ((Float)args[9]).floatValue();
+				float rspeed = ((Float)args[10]).floatValue();
+				float maccel = ((Float)args[11]).floatValue();
+				float raccel = ((Float)args[12]).floatValue();
 				
 				if (blobList.get(s_id) == null) {
 					
