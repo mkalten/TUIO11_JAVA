@@ -20,7 +20,7 @@
  ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
  CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
+ */
 
 import java.applet.*;
 import java.awt.*;
@@ -30,41 +30,48 @@ import java.net.*;
 import TUIO.*;
 
 public class TuioApplet extends JApplet {
-	
-	TuioDemoComponent demo;
-	TuioClient client;
-	int port = 3333;
-	
-	public void init() {
-		try {
-			port = Integer.parseInt(getParameter("port"));
-		} catch (Exception e) {}
-		
-		Dimension size = this.getSize();
-		
-		TuioDemoComponent demo = new TuioDemoComponent();
-		demo.setSize(size.width,size.height);
-	
-		client = new TuioClient();
-		client.addTuioListener(demo);
-		
-		add(demo);
-		repaint();
-	}
 
-	public void start() {
-		if (!client.isConnected()) client.connect();
-	}
+    TuioDemoComponent demo;
+    TuioClient client;
+    int port = 3333;
 
-	public void stop() {
-		if (client.isConnected()) client.disconnect();
-	}
+    public void init() {
+        try {
+            port = Integer.parseInt(getParameter("port"));
+        } catch (Exception e) {
+        }
 
-	public void destroy() {
-		if (client.isConnected()) client.disconnect();
-		client = null;
-	}
+        Dimension size = this.getSize();
 
-	public void paint( Graphics g ) {
-	}
+        TuioDemoComponent demo = new TuioDemoComponent();
+        demo.setSize(size.width, size.height);
+
+        client = new TuioClient();
+        client.addTuioListener(demo);
+
+        add(demo);
+        repaint();
+    }
+
+    public void start() {
+        if (!client.isConnected()) {
+            client.connect();
+        }
+    }
+
+    public void stop() {
+        if (client.isConnected()) {
+            client.disconnect();
+        }
+    }
+
+    public void destroy() {
+        if (client.isConnected()) {
+            client.disconnect();
+        }
+        client = null;
+    }
+
+    public void paint(Graphics g) {
+    }
 }
