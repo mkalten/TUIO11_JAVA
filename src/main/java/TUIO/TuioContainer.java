@@ -17,7 +17,7 @@
  */
 package TUIO;
 
-import java.util.*;
+import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingDeque;
 
 /**
@@ -159,6 +159,7 @@ abstract class TuioContainer extends TuioPoint {
      * @param	xp	the X coordinate to assign
      * @param	yp	the Y coordinate to assign
      */
+    @Override
     public void update(TuioTime ttime, float xp, float yp) {
         TuioPoint lastPoint = path.getLast();
         super.update(ttime, xp, yp);
@@ -388,11 +389,7 @@ abstract class TuioContainer extends TuioPoint {
      * @return	true of this TuioContainer is moving
      */
     public boolean isMoving() {
-        if ((state == TUIO_ACCELERATING) || (state == TUIO_DECELERATING)) {
-            return true;
-        } else {
-            return false;
-        }
+        return (state == TUIO_ACCELERATING) || (state == TUIO_DECELERATING);
     }
 
 }

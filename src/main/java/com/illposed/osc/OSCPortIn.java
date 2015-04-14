@@ -90,6 +90,7 @@ public class OSCPortIn extends OSCPort implements Runnable {
 
     /**
      * Am I listening for packets?
+     * @return 
      */
     public boolean isListening() {
         return isListening;
@@ -109,6 +110,7 @@ public class OSCPortIn extends OSCPort implements Runnable {
      * Close the socket and free-up resources. It's recommended that clients
      * call this when they are done with the port.
      */
+    @Override
     public void close() {
         socket.close();
     }

@@ -3,11 +3,13 @@
  */
 package com.illposed.osc.utility;
 
-import com.illposed.osc.*;
 
+import com.illposed.osc.OSCBundle;
+import com.illposed.osc.OSCListener;
+import com.illposed.osc.OSCMessage;
+import com.illposed.osc.OSCPacket;
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 /**
  * @author cramakrishnan
@@ -21,7 +23,7 @@ import java.util.Hashtable;
  */
 public class OSCPacketDispatcher {
 
-    private Hashtable<String, OSCListener> addressToClassTable = new Hashtable<String, OSCListener>();
+    private final HashMap<String, OSCListener> addressToClassTable = new HashMap<String, OSCListener>();
 
     /**
      *
@@ -53,8 +55,8 @@ public class OSCPacketDispatcher {
     private void dispatchBundle(OSCBundle bundle) {
         Date timestamp = bundle.getTimestamp();
         OSCPacket[] packets = bundle.getPackets();
-        for (int i = 0; i < packets.length; i++) {
-            dispatchPacket(packets[i], timestamp);
+        for (OSCPacket packet : packets) {
+            dispatchPacket(packet, timestamp);
         }
     }
 
@@ -63,10 +65,8 @@ public class OSCPacketDispatcher {
     }
 
     private void dispatchMessage(OSCMessage message, Date time) {
-        Enumeration keys = addressToClassTable.keys();
-        while (keys.hasMoreElements()) {
-            String key = (String) keys.nextElement();
-			// this supports the OSC regexp facility, but it
+        for (String key : addressToClassTable.keySet()) {
+            // this supports the OSC regexp facility, but it
             // only works in JDK 1.4, so don't support it right now
             // if (key.matches(message.getAddress())) {
             if (key.equals(message.getAddress())) {

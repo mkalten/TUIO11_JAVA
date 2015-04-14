@@ -16,14 +16,11 @@ package com.illposed.osc.utility;
 
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
-import java.math.BigInteger;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class OSCJavaToByteArrayConverter {
 
     protected ByteArrayOutputStream stream = new ByteArrayOutputStream();
-    private byte[] intBytes = new byte[4];
 
     /*public OSCJavaToByteArrayConverter() {
      super();
@@ -31,7 +28,6 @@ public class OSCJavaToByteArrayConverter {
     /**
      * Creation date: (2/23/2001 2:43:25 AM)
      *
-     * @param anArray java.lang.Object[]
      *
      */
     public void appendNullCharToAlignStream() {
@@ -75,7 +71,7 @@ public class OSCJavaToByteArrayConverter {
      * @param f java.lang.Float
      */
     public void write(Float f) {
-        writeIntegerToByteArray(Float.floatToIntBits(f.floatValue()));
+        writeIntegerToByteArray(Float.floatToIntBits(f));
     }
 
     /**
@@ -84,7 +80,7 @@ public class OSCJavaToByteArrayConverter {
      * @param i java.lang.Integer
      */
     public void write(Integer i) {
-        writeIntegerToByteArray(i.intValue());
+        writeIntegerToByteArray(i);
     }
 
     /**
@@ -125,20 +121,19 @@ public class OSCJavaToByteArrayConverter {
         }
         if (anObject instanceof Integer) {
             write((Integer) anObject);
-            return;
         }
     }
 
     /**
      * Creation date: (2/23/2001 2:43:25 AM)
      *
-     * @param aClass Class
+     * @param c
      */
     public void writeType(Class c) {
 		// A big ol' case statement -- what's polymorphism mean, again?
         // I really wish I could extend the base classes!
 
-		// use the appropriate flags to tell SuperCollider what kind of 
+        // use the appropriate flags to tell SuperCollider what kind of 
         // thing it is looking at
         if (Integer.class.equals(c)) {
             stream.write('i');
@@ -162,46 +157,44 @@ public class OSCJavaToByteArrayConverter {
         }
         if (Character.class.equals(c)) {
             stream.write('c');
-            return;
         }
     }
 
     /**
      * Creation date: (2/23/2001 2:43:25 AM)
      *
-     * @param anArray java.lang.Object[]
+     * @param array
      */
     public void writeTypesArray(Object[] array) {
-		// A big ol' case statement in a for loop -- what's polymorphism mean, again?
+        // A big ol' case statement in a for loop -- what's polymorphism mean, again?
         // I really wish I could extend the base classes!
-
-        for (int i = 0; i < array.length; i++) {
-            if (null == array[i]) {
+        for (Object array1 : array) {
+            if (null == array1) {
                 continue;
             }
-			// if the array at i is a type of array write a [
+            // if the array at i is a type of array write a [
             // This is used for nested arguments
-            if (array[i].getClass().isArray()) {
+            if (array1.getClass().isArray()) {
                 stream.write('[');
-				// fill the [] with the SuperCollider types corresponding to the object
+                // fill the [] with the SuperCollider types corresponding to the object
                 // (i.e. Object of type String needs -s).
-                writeTypesArray((Object[]) array[i]);
+                writeTypesArray((Object[]) array1);
                 // close the array
                 stream.write(']');
                 continue;
             }
             // Create a way to deal with Boolean type objects
-            if (Boolean.TRUE.equals(array[i])) {
+            if (Boolean.TRUE.equals(array1)) {
                 stream.write('T');
                 continue;
             }
-            if (Boolean.FALSE.equals(array[i])) {
+            if (Boolean.FALSE.equals(array1)) {
                 stream.write('F');
                 continue;
             }
-			// go through the array and write the superCollider types as shown in the 
+            // go through the array and write the superCollider types as shown in the 
             // above method. the Classes derived here are used as the arg to the above method
-            writeType(array[i].getClass());
+            writeType(array1.getClass());
         }
         // align the stream with padded bytes
         appendNullCharToAlignStream();
@@ -213,22 +206,19 @@ public class OSCJavaToByteArrayConverter {
      *
      * @param vector the collection I am to write out types for
      */
-    public void writeTypes(Vector vector) {
-		// A big ol' case statement in a for loop -- what's polymorphism mean, again?
+    public void writeTypes(ArrayList vector) {
+        // A big ol' case statement in a for loop -- what's polymorphism mean, again?
         // I really wish I could extend the base classes!
 
-        Enumeration enm = vector.elements();
-        Object nextObject;
-        while (enm.hasMoreElements()) {
-            nextObject = enm.nextElement();
+        for(Object nextObject : vector) {
             if (null == nextObject) {
                 continue;
             }
-			// if the array at i is a type of array write a [
+            // if the array at i is a type of array write a [
             // This is used for nested arguments
             if (nextObject.getClass().isArray()) {
                 stream.write('[');
-				// fill the [] with the SuperCollider types corresponding to the object
+                // fill the [] with the SuperCollider types corresponding to the object
                 // (e.g., Object of type String needs -s).
                 writeTypesArray((Object[]) nextObject);
                 // close the array
@@ -244,7 +234,7 @@ public class OSCJavaToByteArrayConverter {
                 stream.write('F');
                 continue;
             }
-			// go through the array and write the superCollider types as shown in the 
+            // go through the array and write the superCollider types as shown in the 
             // above method. the Classes derived here are used as the arg to the above method
             writeType(nextObject.getClass());
         }

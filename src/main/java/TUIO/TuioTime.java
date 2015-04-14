@@ -102,7 +102,7 @@ public class TuioTime {
      * Microseconds values to the newly created TuioTime.
      *
      * @param ttime the TuioTime used to copy
-     * @param the Frame ID to associate
+     * @param f_id
      */
     public TuioTime(TuioTime ttime, long f_id) {
         this.seconds = ttime.getSeconds();
@@ -188,11 +188,7 @@ public class TuioTime {
      * attributes
      */
     public boolean equals(TuioTime ttime) {
-        if ((seconds == ttime.getSeconds()) && (micro_seconds == ttime.getMicroseconds())) {
-            return true;
-        } else {
-            return false;
-        }
+        return (seconds == ttime.getSeconds()) && (micro_seconds == ttime.getMicroseconds());
     }
 
     /**

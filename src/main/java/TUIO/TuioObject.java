@@ -205,6 +205,7 @@ public class TuioObject extends TuioContainer {
      *
      * @param	ttime	the TuioTime to assign
      */
+    @Override
     public void stop(TuioTime ttime) {
         update(ttime, xpos, ypos, angle);
     }
@@ -259,12 +260,9 @@ public class TuioObject extends TuioContainer {
      *
      * @return	true of this TuioObject is moving
      */
+    @Override
     public boolean isMoving() {
-        if ((state == TUIO_ACCELERATING) || (state == TUIO_DECELERATING) || (state == TUIO_ROTATING)) {
-            return true;
-        } else {
-            return false;
-        }
+        return (state == TUIO_ACCELERATING) || (state == TUIO_DECELERATING) || (state == TUIO_ROTATING);
     }
 
 }

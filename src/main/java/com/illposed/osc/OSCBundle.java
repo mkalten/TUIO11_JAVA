@@ -10,15 +10,14 @@
  *
  * Use this when you want to send a bunch of OscPackets in one go.
  *
- * Internally, I use Vector to maintain jdk1.1 compatability
+ * Internally, I use ArrayList to maintain jdk1.1 compatability
  */
 package com.illposed.osc;
 
 import java.math.BigInteger;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.GregorianCalendar;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.illposed.osc.utility.*;
 
@@ -26,7 +25,7 @@ public class OSCBundle extends OSCPacket {
 
     protected Date timestamp;
     //	protected OSCPacket[] packets;
-    protected Vector<OSCPacket> packets;
+    protected ArrayList<OSCPacket> packets;
     public static final BigInteger SECONDS_FROM_1900_to_1970
             = new BigInteger("2208988800");
     // 17 leap years
@@ -57,17 +56,17 @@ public class OSCBundle extends OSCPacket {
 
     /**
      * @param newPackets OscPacket[]
-     * @param time java.lang.Time
+     * @param newTimestamp
      */
     public OSCBundle(OSCPacket[] newPackets, Date newTimestamp) {
         super();
         if (null != newPackets) {
-            packets = new Vector<OSCPacket>(newPackets.length);
-            for (int i = 0; i < newPackets.length; i++) {
-                packets.add(newPackets[i]);
+            packets = new ArrayList<OSCPacket>(newPackets.length);
+            for (OSCPacket newPacket : newPackets) {
+                packets.add(newPacket);
             }
         } else {
-            packets = new Vector<OSCPacket>();
+            packets = new ArrayList<OSCPacket>();
         }
         timestamp = newTimestamp;
         init();
@@ -128,11 +127,8 @@ public class OSCBundle extends OSCPacket {
     protected void computeByteArray(OSCJavaToByteArrayConverter stream) {
         stream.write("#bundle");
         computeTimeTagByteArray(stream);
-        Enumeration enm = packets.elements();
-        OSCPacket nextElement;
         byte[] packetBytes;
-        while (enm.hasMoreElements()) {
-            nextElement = (OSCPacket) enm.nextElement();
+        for(OSCPacket nextElement : packets) {
             packetBytes = nextElement.getByteArray();
             stream.write(packetBytes.length);
             stream.write(packetBytes);

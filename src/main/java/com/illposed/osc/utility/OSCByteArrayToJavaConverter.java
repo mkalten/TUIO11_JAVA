@@ -21,14 +21,17 @@ public class OSCByteArrayToJavaConverter {
     int bytesLength;
     int streamPosition;
 
-    private byte[] intBytes = new byte[4];
-    private byte[] floatBytes = new byte[4];
+    private final byte[] intBytes = new byte[4];
+    private final byte[] floatBytes = new byte[4];
 
-    private byte[] secondBytes = new byte[8];
-    private byte[] picosecBytes = new byte[8];
+    private final byte[] secondBytes = new byte[8];
+    private final byte[] picosecBytes = new byte[8];
 
     /**
      * Helper object for converting from a byte array to Java objects
+     * @param byteArray
+     * @param bytesLength
+     * @return 
      */
     /*public OSCByteArrayToJavaConverter() {
      super();
@@ -58,7 +61,7 @@ public class OSCByteArrayToJavaConverter {
         OSCByteArrayToJavaConverter myConverter = new OSCByteArrayToJavaConverter();
         while (streamPosition < bytesLength) {
             // recursively read through the stream and convert packets you find
-            int packetLength = ((Integer) readInteger()).intValue();
+            int packetLength = ((Integer) readInteger());
             byte[] packetBytes = new byte[packetLength];
             //streamPosition++;
             System.arraycopy(bytes, streamPosition, packetBytes, 0, packetLength);
@@ -160,7 +163,7 @@ public class OSCByteArrayToJavaConverter {
      * @return a Character
      */
     private Object readChar() {
-        return new Character((char) bytes[streamPosition++]);
+        return (char) bytes[streamPosition++];
     }
 
     /**
@@ -186,7 +189,7 @@ public class OSCByteArrayToJavaConverter {
                 + ((floatBytes[1] & 0xFF) << 16)
                 + ((floatBytes[0] & 0xFF) << 24);
 
-        return new Float(Float.intBitsToFloat(floatBits));
+        return Float.intBitsToFloat(floatBits);
     }
 
     /**
@@ -205,7 +208,7 @@ public class OSCByteArrayToJavaConverter {
                 + ((intBytes[1] & 0xFF) << 16)
                 + ((intBytes[0] & 0xFF) << 24);
 
-        return new Integer(intBits);
+        return intBits;
     }
 
     /**
@@ -224,7 +227,7 @@ public class OSCByteArrayToJavaConverter {
                 + ((intBytes[1] & 0xFF) << 16)
                 + ((intBytes[0] & 0xFF) << 24);
 
-        return new Integer(intBits);
+        return intBits;
     }
 
     /**
