@@ -22,7 +22,12 @@
  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import TUIO.*;
+import TUIO.TuioBlob;
+import TUIO.TuioClient;
+import TUIO.TuioCursor;
+import TUIO.TuioListener;
+import TUIO.TuioObject;
+import TUIO.TuioTime;
 
 public class TuioDump implements TuioListener {
 

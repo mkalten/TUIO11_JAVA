@@ -1,7 +1,7 @@
 /*
- TUIO Java GUI Demo
+ TUIO Java Console Example
  Copyright (c) 2005-2014 Martin Kaltenbrunner <martin@tuio.org>
- 
+
  Permission is hereby granted, free of charge, to any person obtaining
  a copy of this software and associated documentation files
  (the "Software"), to deal in the Software without restriction,
@@ -22,19 +22,25 @@
  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.event.*;
-import java.awt.image.*;
-import java.util.*;
-import javax.swing.*;
-import TUIO.*;
+import TUIO.TuioBlob;
+import TUIO.TuioCursor;
+import TUIO.TuioListener;
+import TUIO.TuioObject;
+import TUIO.TuioPoint;
+import TUIO.TuioTime;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.util.ArrayList;
+import java.util.HashMap;
+import javax.swing.JComponent;
 
 public class TuioDemoComponent extends JComponent implements TuioListener {
 
-    private Hashtable<Long, TuioDemoObject> objectList = new Hashtable<Long, TuioDemoObject>();
-    private Hashtable<Long, TuioCursor> cursorList = new Hashtable<Long, TuioCursor>();
-    private Hashtable<Long, TuioDemoBlob> blobList = new Hashtable<Long, TuioDemoBlob>();
+    private final HashMap<Long, TuioDemoObject> objectList = new HashMap<Long, TuioDemoObject>();
+    private final HashMap<Long, TuioCursor> cursorList = new HashMap<Long, TuioCursor>();
+    private final HashMap<Long, TuioDemoBlob> blobList = new HashMap<Long, TuioDemoBlob>();
 
     public static final int finger_size = 15;
     public static final int object_size = 60;
@@ -44,6 +50,7 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
     private float scale = 1.0f;
     public boolean verbose = false;
 
+    @Override
     public void setSize(int w, int h) {
         super.setSize(w, h);
         width = w;
@@ -140,10 +147,12 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
         repaint();
     }
 
+    @Override
     public void paint(Graphics g) {
         update(g);
     }
 
+    @Override
     public void update(Graphics g) {
 
         Graphics2D g2 = (Graphics2D) g;
@@ -156,9 +165,7 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
         int w = (int) Math.round(width - scale * finger_size / 2.0f);
         int h = (int) Math.round(height - scale * finger_size / 2.0f);
 
-        Enumeration<TuioCursor> cursors = cursorList.elements();
-        while (cursors.hasMoreElements()) {
-            TuioCursor tcur = cursors.nextElement();
+        for (TuioCursor tcur : cursorList.values()) {
             if (tcur == null) {
                 continue;
             }
@@ -167,8 +174,7 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
             if (current_point != null) {
                 // draw the cursor path
                 g2.setPaint(Color.blue);
-                for (int i = 0; i < path.size(); i++) {
-                    TuioPoint next_point = path.get(i);
+                for (TuioPoint next_point : path) {
                     g2.drawLine(current_point.getScreenX(w), current_point.getScreenY(h), next_point.getScreenX(w), next_point.getScreenY(h));
                     current_point = next_point;
                 }
@@ -177,15 +183,15 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
             // draw the finger tip
             g2.setPaint(Color.lightGray);
             int s = (int) (scale * finger_size);
-            g2.fillOval(current_point.getScreenX(w - s / 2), current_point.getScreenY(h - s / 2), s, s);
-            g2.setPaint(Color.black);
-            g2.drawString(tcur.getCursorID() + "", current_point.getScreenX(w), current_point.getScreenY(h));
+            if (current_point != null) {
+                g2.fillOval(current_point.getScreenX(w - s / 2), current_point.getScreenY(h - s / 2), s, s);
+                g2.setPaint(Color.black);
+                g2.drawString(tcur.getCursorID() + "", current_point.getScreenX(w), current_point.getScreenY(h));
+            }
         }
 
         // draw the objects
-        Enumeration<TuioDemoObject> objects = objectList.elements();
-        while (objects.hasMoreElements()) {
-            TuioDemoObject tobj = objects.nextElement();
+        for (TuioDemoObject tobj : objectList.values()) {
             if (tobj != null) {
                 tobj.paint(g2, width, height);
             }

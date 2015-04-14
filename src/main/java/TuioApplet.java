@@ -1,7 +1,7 @@
 /*
- TUIO Java Applet Demo
+ TUIO Java Console Example
  Copyright (c) 2005-2014 Martin Kaltenbrunner <martin@tuio.org>
- 
+
  Permission is hereby granted, free of charge, to any person obtaining
  a copy of this software and associated documentation files
  (the "Software"), to deal in the Software without restriction,
@@ -22,19 +22,17 @@
  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import java.applet.*;
-import java.awt.*;
-import javax.swing.*;
-import java.io.*;
-import java.net.*;
-import TUIO.*;
+import TUIO.TuioClient;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import javax.swing.JApplet;
 
 public class TuioApplet extends JApplet {
 
-    TuioDemoComponent demo;
     TuioClient client;
     int port = 3333;
 
+    @Override
     public void init() {
         try {
             port = Integer.parseInt(getParameter("port"));
@@ -53,18 +51,21 @@ public class TuioApplet extends JApplet {
         repaint();
     }
 
+    @Override
     public void start() {
         if (!client.isConnected()) {
             client.connect();
         }
     }
 
+    @Override
     public void stop() {
         if (client.isConnected()) {
             client.disconnect();
         }
     }
 
+    @Override
     public void destroy() {
         if (client.isConnected()) {
             client.disconnect();
@@ -72,6 +73,7 @@ public class TuioApplet extends JApplet {
         client = null;
     }
 
+    @Override
     public void paint(Graphics g) {
     }
 }

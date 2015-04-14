@@ -1,7 +1,7 @@
 /*
- TUIO Java GUI Demo
+ TUIO Java Console Example
  Copyright (c) 2005-2014 Martin Kaltenbrunner <martin@tuio.org>
- 
+
  Permission is hereby granted, free of charge, to any person obtaining
  a copy of this software and associated documentation files
  (the "Software"), to deal in the Software without restriction,
@@ -22,12 +22,12 @@
  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import javax.swing.*;
-import java.awt.geom.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import TUIO.*;
+import TUIO.TuioObject;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 
 public class TuioDemoObject extends TuioObject {
 

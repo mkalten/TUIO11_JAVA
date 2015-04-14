@@ -1,7 +1,7 @@
 /*
- TUIO Java GUI Demo
+ TUIO Java Console Example
  Copyright (c) 2005-2014 Martin Kaltenbrunner <martin@tuio.org>
- 
+
  Permission is hereby granted, free of charge, to any person obtaining
  a copy of this software and associated documentation files
  (the "Software"), to deal in the Software without restriction,
@@ -22,25 +22,32 @@
  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.event.*;
-import java.awt.image.*;
-import java.util.*;
-import javax.swing.*;
-import TUIO.*;
+import TUIO.TuioClient;
+import TUIO.TuioListener;
+import java.awt.Cursor;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import javax.swing.JFrame;
 
-public class TuioDemo {
+public final class TuioDemo {
 
     private final int window_width = 640;
     private final int window_height = 480;
 
     private boolean fullscreen = false;
 
-    private TuioDemoComponent demo;
+    private final TuioDemoComponent demo;
     private JFrame frame;
-    private GraphicsDevice device;
-    private Cursor invisibleCursor;
+    private final GraphicsDevice device;
+    private final Cursor invisibleCursor;
 
     public TuioDemo() {
         demo = new TuioDemoComponent();
@@ -63,12 +70,14 @@ public class TuioDemo {
         frame.setResizable(false);
 
         frame.addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent evt) {
                 System.exit(0);
             }
         });
 
         frame.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent evt) {
                 if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     System.exit(0);
