@@ -65,14 +65,8 @@ public class OSCPacketDispatcher {
     }
 
     private void dispatchMessage(OSCMessage message, Date time) {
-        for (String key : addressToClassTable.keySet()) {
-            // this supports the OSC regexp facility, but it
-            // only works in JDK 1.4, so don't support it right now
-            // if (key.matches(message.getAddress())) {
-            if (key.equals(message.getAddress())) {
-                OSCListener listener = (OSCListener) addressToClassTable.get(key);
-                listener.acceptMessage(time, message);
-            }
+        if (addressToClassTable.containsKey(message.getAddress())) {
+            addressToClassTable.get(message.getAddress()).acceptMessage(time, message);
         }
     }
 }

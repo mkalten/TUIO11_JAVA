@@ -28,6 +28,7 @@ import java.net.*;
 import java.io.IOException;
 import com.illposed.osc.utility.OSCByteArrayToJavaConverter;
 import com.illposed.osc.utility.OSCPacketDispatcher;
+import org.apache.commons.logging.LogFactory;
 
 public class OSCPortIn extends OSCPort implements Runnable {
 
@@ -62,11 +63,11 @@ public class OSCPortIn extends OSCPort implements Runnable {
                 dispatcher.dispatchPacket(oscPacket);
             } catch (java.net.SocketException e) {
                 if (isListening) {
-                    e.printStackTrace();
+                    LogFactory.getLog(OSCPortIn.class).fatal(null, e);
                 }
             } catch (IOException e) {
                 if (isListening) {
-                    e.printStackTrace();
+                    LogFactory.getLog(OSCPortIn.class).fatal(null, e);
                 }
             }
         }

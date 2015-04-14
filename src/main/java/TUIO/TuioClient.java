@@ -1,20 +1,27 @@
-/*
- TUIO Java library
- Copyright (c) 2005-2014 Martin Kaltenbrunner <martin@tuio.org>
- 
- This library is free software; you can redistribute it and/or
- modify it under the terms of the GNU Lesser General Public
- License as published by the Free Software Foundation; either
- version 3.0 of the License, or (at your option) any later version.
- 
- This library is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- Lesser General Public License for more details.
- 
- You should have received a copy of the GNU Lesser General Public
- License along with this library.
+/**
+ * TUIO Java Console Example
+ * Copyright (c) 2005-2014 Martin Kaltenbrunner <martin@tuio.org>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files
+ * (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge,
+ * publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR
+ * ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 package TUIO;
 
 import com.illposed.osc.*;
@@ -160,16 +167,16 @@ public class TuioClient implements OSCListener {
         }
     }
 
-    /**
-     * Returns a ArrayList of all currently active TuioObjects
-     *
-     * @return a ArrayList of all currently active TuioObjects
-     * @deprecated use {@link #getTuioObjectList()} instead.
-     */
-    @Deprecated
-    public ArrayList<TuioObject> getTuioObjects() {
-        return new ArrayList<TuioObject>(objectList.values());
-    }
+//    /**
+//     * Returns a ArrayList of all currently active TuioObjects
+//     *
+//     * @return a ArrayList of all currently active TuioObjects
+//     * @deprecated use {@link #getTuioObjectList()} instead.
+//     */
+//    @Deprecated
+//    public ArrayList<TuioObject> getTuioObjects() {
+//        return new ArrayList<TuioObject>(objectList.values());
+//    }
 
     /**
      * Returns an ArrayList of all currently active TuioObjects
@@ -180,16 +187,16 @@ public class TuioClient implements OSCListener {
         return new ArrayList<TuioObject>(objectList.values());
     }
 
-    /**
-     * Returns a ArrayList of all currently active TuioCursors
-     *
-     * @return a ArrayList of all currently active TuioCursors
-     * @deprecated use {@link #getTuioCursorList()} instead.
-     */
-    @Deprecated
-    public ArrayList<TuioCursor> getTuioCursors() {
-        return new ArrayList<TuioCursor>(cursorList.values());
-    }
+//    /**
+//     * Returns a ArrayList of all currently active TuioCursors
+//     *
+//     * @return a ArrayList of all currently active TuioCursors
+//     * @deprecated use {@link #getTuioCursorList()} instead.
+//     */
+//    @Deprecated
+//    public ArrayList<TuioCursor> getTuioCursors() {
+//        return new ArrayList<TuioCursor>(cursorList.values());
+//    }
 
     /**
      * Returns an ArrayList of all currently active TuioCursors
@@ -200,16 +207,16 @@ public class TuioClient implements OSCListener {
         return new ArrayList<TuioCursor>(cursorList.values());
     }
 
-    /**
-     * Returns a ArrayList of all currently active TuioBlobs
-     *
-     * @return a ArrayList of all currently active TuioBlobs
-     * @deprecated use {@link #getTuioBlobList()} instead.
-     */
-    @Deprecated
-    public ArrayList<TuioBlob> getTuioBlobs() {
-        return new ArrayList<TuioBlob>(blobList.values());
-    }
+//    /**
+//     * Returns a ArrayList of all currently active TuioBlobs
+//     *
+//     * @return a ArrayList of all currently active TuioBlobs
+//     * @deprecated use {@link #getTuioBlobList()} instead.
+//     */
+//    @Deprecated
+//    public ArrayList<TuioBlob> getTuioBlobs() {
+//        return new ArrayList<TuioBlob>(blobList.values());
+//    }
 
     /**
      * Returns an ArrayList of all currently active TuioBlobs
@@ -477,7 +484,7 @@ public class TuioClient implements OSCListener {
                                         for (TuioCursor tc : new ArrayList<TuioCursor>(cursorList.values())) {
                                             int c_id = tc.getCursorID();
                                             if (c_id >= maxCursorID) {
-                                                freeCursorList.remove(c_id);
+                                                freeCursorList.remove(tc);
                                             }
                                         }
                                     } else {
@@ -636,7 +643,7 @@ public class TuioClient implements OSCListener {
                                         for (TuioBlob tb : new ArrayList<TuioBlob>(freeBlobList)) {
                                             int b_id = tb.getBlobID();
                                             if (b_id >= maxBlobID) {
-                                                freeBlobList.remove(b_id);
+                                                freeBlobList.remove(tb);
                                             }
                                         }
                                     } else {

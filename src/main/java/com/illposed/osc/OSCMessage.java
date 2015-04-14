@@ -12,7 +12,6 @@
  */
 package com.illposed.osc;
 
-import java.util.Enumeration;
 import java.util.ArrayList;
 
 import com.illposed.osc.utility.*;

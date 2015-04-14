@@ -129,33 +129,23 @@ public class OSCJavaToByteArrayConverter {
      *
      * @param c
      */
-    public void writeType(Class c) {
-		// A big ol' case statement -- what's polymorphism mean, again?
+    public void writeType(Class<?> c) {
+        // A big ol' case statement -- what's polymorphism mean, again?
         // I really wish I could extend the base classes!
 
         // use the appropriate flags to tell SuperCollider what kind of 
         // thing it is looking at
         if (Integer.class.equals(c)) {
             stream.write('i');
-            return;
-        }
-        if (java.math.BigInteger.class.equals(c)) {
+        } else if (java.math.BigInteger.class.equals(c)) {
             stream.write('h');
-            return;
-        }
-        if (Float.class.equals(c)) {
+        } else if (Float.class.equals(c)) {
             stream.write('f');
-            return;
-        }
-        if (Double.class.equals(c)) {
+        } else if (Double.class.equals(c)) {
             stream.write('d');
-            return;
-        }
-        if (String.class.equals(c)) {
+        } else if (String.class.equals(c)) {
             stream.write('s');
-            return;
-        }
-        if (Character.class.equals(c)) {
+        } else if (Character.class.equals(c)) {
             stream.write('c');
         }
     }
@@ -170,76 +160,36 @@ public class OSCJavaToByteArrayConverter {
         // I really wish I could extend the base classes!
         for (Object array1 : array) {
             if (null == array1) {
-                continue;
-            }
-            // if the array at i is a type of array write a [
-            // This is used for nested arguments
-            if (array1.getClass().isArray()) {
+            } else  if (array1.getClass().isArray()) {
+                // if the array at i is a type of array write a [
+                // This is used for nested arguments
                 stream.write('[');
                 // fill the [] with the SuperCollider types corresponding to the object
                 // (i.e. Object of type String needs -s).
                 writeTypesArray((Object[]) array1);
                 // close the array
                 stream.write(']');
-                continue;
-            }
-            // Create a way to deal with Boolean type objects
-            if (Boolean.TRUE.equals(array1)) {
+            } else if (Boolean.TRUE.equals(array1)) {
+                // Create a way to deal with Boolean type objects
                 stream.write('T');
-                continue;
-            }
-            if (Boolean.FALSE.equals(array1)) {
+            } else if (Boolean.FALSE.equals(array1)) {
+                // Create a way to deal with Boolean type objects
                 stream.write('F');
-                continue;
+            } else {
+                // go through the array and write the superCollider types as shown in the 
+                // above method. the Classes derived here are used as the arg to the above method
+                writeType(array1.getClass());
             }
-            // go through the array and write the superCollider types as shown in the 
-            // above method. the Classes derived here are used as the arg to the above method
-            writeType(array1.getClass());
         }
         // align the stream with padded bytes
         appendNullCharToAlignStream();
     }
 
     /**
-     * Same as writeSuperColliderTypes(Object[]), just that it takes a vector
-     * (for jdk1.1 compatibility), rather than an array.
-     *
      * @param vector the collection I am to write out types for
      */
-    public void writeTypes(ArrayList vector) {
-        // A big ol' case statement in a for loop -- what's polymorphism mean, again?
-        // I really wish I could extend the base classes!
-
-        for(Object nextObject : vector) {
-            if (null == nextObject) {
-                continue;
-            }
-            // if the array at i is a type of array write a [
-            // This is used for nested arguments
-            if (nextObject.getClass().isArray()) {
-                stream.write('[');
-                // fill the [] with the SuperCollider types corresponding to the object
-                // (e.g., Object of type String needs -s).
-                writeTypesArray((Object[]) nextObject);
-                // close the array
-                stream.write(']');
-                continue;
-            }
-            // Create a way to deal with Boolean type objects
-            if (Boolean.TRUE.equals(nextObject)) {
-                stream.write('T');
-                continue;
-            }
-            if (Boolean.FALSE.equals(nextObject)) {
-                stream.write('F');
-                continue;
-            }
-            // go through the array and write the superCollider types as shown in the 
-            // above method. the Classes derived here are used as the arg to the above method
-            writeType(nextObject.getClass());
-        }
-        // align the stream with padded bytes
-        appendNullCharToAlignStream();
+    public void writeTypes(ArrayList<Object> vector) {
+        writeTypesArray(vector.toArray(new Object[]{}));
     }
 
     /**
@@ -266,7 +216,7 @@ public class OSCJavaToByteArrayConverter {
     }
 
     /**
-     * Line up the BigEnd of the bytes to a 4 byte boundry
+     * Line up the BigEnd of the bytes to a 4 byte boundary
      *
      * @param bytes byte[]
      */
@@ -294,7 +244,7 @@ public class OSCJavaToByteArrayConverter {
     }
 
     /**
-     * Line up the LittleEnd of the bytes to a 4 byte boundry
+     * Line up the LittleEnd of the bytes to a 4 byte boundary
      *
      * @param bytes byte[]
      */

@@ -20,6 +20,7 @@ import java.util.GregorianCalendar;
 import java.util.ArrayList;
 
 import com.illposed.osc.utility.*;
+import java.util.Arrays;
 
 public class OSCBundle extends OSCPacket {
 
@@ -62,9 +63,7 @@ public class OSCBundle extends OSCPacket {
         super();
         if (null != newPackets) {
             packets = new ArrayList<OSCPacket>(newPackets.length);
-            for (OSCPacket newPacket : newPackets) {
-                packets.add(newPacket);
-            }
+            packets.addAll(Arrays.asList(newPackets));
         } else {
             packets = new ArrayList<OSCPacket>();
         }
