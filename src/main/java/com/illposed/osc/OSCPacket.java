@@ -17,7 +17,7 @@
  */
 package com.illposed.osc;
 
-import com.illposed.osc.utility.*;
+import com.illposed.osc.utility.OSCJavaToByteArrayConverter;
 
 public abstract class OSCPacket {
 

@@ -39,9 +39,9 @@ import javax.swing.JComponent;
 
 public class TuioDemoComponent extends JComponent implements TuioListener {
 
-    private final HashMap<Long, TuioDemoObject> objectList = new HashMap<Long, TuioDemoObject>();
-    private final HashMap<Long, TuioCursor> cursorList = new HashMap<Long, TuioCursor>();
-    private final HashMap<Long, TuioDemoBlob> blobList = new HashMap<Long, TuioDemoBlob>();
+    private final HashMap<Long, TuioDemoObject> objectMap = new HashMap<Long, TuioDemoObject>();
+    private final HashMap<Long, TuioCursor> cursorMap = new HashMap<Long, TuioCursor>();
+    private final HashMap<Long, TuioDemoBlob> blobMap = new HashMap<Long, TuioDemoBlob>();
 
     public static final int finger_size = 15;
     public static final int object_size = 60;
@@ -61,7 +61,7 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
 
     public void addTuioObject(TuioObject tobj) {
         TuioDemoObject demo = new TuioDemoObject(tobj);
-        objectList.put(tobj.getSessionID(), demo);
+        objectMap.put(tobj.getSessionID(), demo);
 
         if (verbose) {
             System.out.println("add obj " + tobj.getSymbolID() + " (" + tobj.getSessionID() + ") " + tobj.getX() + " " + tobj.getY() + " " + tobj.getAngle());
@@ -70,7 +70,7 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
 
     public void updateTuioObject(TuioObject tobj) {
 
-        TuioDemoObject demo = (TuioDemoObject) objectList.get(tobj.getSessionID());
+        TuioDemoObject demo = (TuioDemoObject) objectMap.get(tobj.getSessionID());
         demo.update(tobj);
 
         if (verbose) {
@@ -79,7 +79,7 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
     }
 
     public void removeTuioObject(TuioObject tobj) {
-        objectList.remove(tobj.getSessionID());
+        objectMap.remove((Long) tobj.getSessionID());
 
         if (verbose) {
             System.out.println("del obj " + tobj.getSymbolID() + " (" + tobj.getSessionID() + ")");
@@ -88,8 +88,8 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
 
     public void addTuioCursor(TuioCursor tcur) {
 
-        if (!cursorList.containsKey(tcur.getSessionID())) {
-            cursorList.put(tcur.getSessionID(), tcur);
+        if (!cursorMap.containsKey(tcur.getSessionID())) {
+            cursorMap.put(tcur.getSessionID(), tcur);
             repaint();
         }
 
@@ -109,7 +109,7 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
 
     public void removeTuioCursor(TuioCursor tcur) {
 
-        cursorList.remove(tcur.getSessionID());
+        cursorMap.remove((Long) tcur.getSessionID());
         repaint();
 
         if (verbose) {
@@ -119,7 +119,7 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
 
     public void addTuioBlob(TuioBlob tblb) {
         TuioDemoBlob demo = new TuioDemoBlob(tblb);
-        blobList.put(tblb.getSessionID(), demo);
+        blobMap.put(tblb.getSessionID(), demo);
 
         if (verbose) {
             System.out.println("add blb " + tblb.getBlobID() + " (" + tblb.getSessionID() + ") " + tblb.getX() + " " + tblb.getY() + " " + tblb.getAngle());
@@ -128,7 +128,7 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
 
     public void updateTuioBlob(TuioBlob tblb) {
 
-        TuioDemoBlob demo = (TuioDemoBlob) blobList.get(tblb.getSessionID());
+        TuioDemoBlob demo = (TuioDemoBlob) blobMap.get(tblb.getSessionID());
         demo.update(tblb);
 
         if (verbose) {
@@ -137,7 +137,7 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
     }
 
     public void removeTuioBlob(TuioBlob tblb) {
-        blobList.remove(tblb.getSessionID());
+        blobMap.remove((Long) tblb.getSessionID());
 
         if (verbose) {
             System.out.println("del blb " + tblb.getBlobID() + " (" + tblb.getSessionID() + ")");
@@ -166,7 +166,7 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
         int w = (int) Math.round(width - scale * finger_size / 2.0f);
         int h = (int) Math.round(height - scale * finger_size / 2.0f);
 
-        for (TuioCursor tcur : cursorList.values()) {
+        for (TuioCursor tcur : cursorMap.values()) {
             if (tcur == null) {
                 continue;
             }
@@ -192,7 +192,7 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
         }
 
         // draw the objects
-        for (TuioDemoObject tobj : objectList.values()) {
+        for (TuioDemoObject tobj : objectMap.values()) {
             if (tobj != null) {
                 tobj.paint(g2, width, height);
             }

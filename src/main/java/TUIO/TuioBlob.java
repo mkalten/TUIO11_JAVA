@@ -1,27 +1,25 @@
 /**
- * TUIO Java Console Example
- * Copyright (c) 2005-2014 Martin Kaltenbrunner <martin@tuio.org>
+ * TUIO Java Console Example Copyright (c) 2005-2014 Martin Kaltenbrunner
+ * <martin@tuio.org>
  *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files
- * (the "Software"), to deal in the Software without restriction,
- * including without limitation the rights to use, copy, modify, merge,
- * publish, distribute, sublicense, and/or sell copies of the Software,
- * and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR
- * ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
- * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
-
 package TUIO;
 
 /**
@@ -43,15 +41,15 @@ public class TuioBlob extends TuioContainer {
     /**
      * The width value.
      */
-    float width;
+    protected float width;
     /**
      * The height value.
      */
-    float height;
+    protected float height;
     /**
      * The area value.
      */
-    float area;
+    protected float area;
     /**
      * The rotation speed value.
      */
@@ -72,6 +70,7 @@ public class TuioBlob extends TuioContainer {
      *
      * @param	ttime	the TuioTime to assign
      * @param	si	the Session ID to assign
+     * @param   bi
      * @param	xp	the X coordinate to assign
      * @param	yp	the Y coordinate to assign
      * @param	a	the angle to assign
@@ -79,7 +78,7 @@ public class TuioBlob extends TuioContainer {
      * @param	h	the height to assign
      * @param	f	the area to assign
      */
-    TuioBlob(TuioTime ttime, long si, int bi, float xp, float yp, float a, float w, float h, float f) {
+    protected TuioBlob(TuioTime ttime, long si, int bi, float xp, float yp, float a, float w, float h, float f) {
         super(ttime, si, xp, yp);
         blob_id = bi;
         angle = a;
@@ -92,7 +91,7 @@ public class TuioBlob extends TuioContainer {
 
     /**
      * This constructor takes the provided Session ID, Blob ID, X and Y
-     * coordinate and angle, and assigs these values to the newly created
+     * coordinate and angle, and assigns these values to the newly created
      * TuioBlob.
      *
      * @param	si	the Session ID to assign
@@ -116,7 +115,7 @@ public class TuioBlob extends TuioContainer {
     }
 
     /**
-     * This constructor takes the atttibutes of the provided TuioBlob and assigs
+     * This constructor takes the attributes of the provided TuioBlob and assigns
      * these values to the newly created TuioBlob.
      *
      * @param	tblb	the TuioBlob to assign
@@ -235,7 +234,7 @@ public class TuioBlob extends TuioContainer {
     }
 
     /**
-     * Takes the atttibutes of the provided TuioBlob and assigs these values to
+     * Takes the attributes of the provided TuioBlob and assigns these values to
      * this TuioBlob. The TuioTime time stamp of this TuioContainer remains
      * unchanged.
      *
@@ -364,11 +363,7 @@ public class TuioBlob extends TuioContainer {
      */
     @Override
     public boolean isMoving() {
-        if ((state == TUIO_ACCELERATING) || (state == TUIO_DECELERATING) || (state == TUIO_ROTATING)) {
-            return true;
-        } else {
-            return false;
-        }
+        return (state == TUIO_ACCELERATING) || (state == TUIO_DECELERATING) || (state == TUIO_ROTATING);
     }
 
 }

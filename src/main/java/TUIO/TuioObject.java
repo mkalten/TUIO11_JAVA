@@ -75,7 +75,7 @@ public class TuioObject extends TuioContainer {
 
     /**
      * This constructor takes the provided Session ID, Symbol ID, X and Y
-     * coordinate and angle, and assigs these values to the newly created
+     * coordinate and angle, and assigns these values to the newly created
      * TuioObject.
      *
      * @param	si	the Session ID to assign
@@ -93,8 +93,8 @@ public class TuioObject extends TuioContainer {
     }
 
     /**
-     * This constructor takes the atttibutes of the provided TuioObject and
-     * assigs these values to the newly created TuioObject.
+     * This constructor takes the attributes of the provided TuioObject and
+     * assigns these values to the newly created TuioObject.
      *
      * @param	tobj	the TuioObject to assign
      */
@@ -190,7 +190,7 @@ public class TuioObject extends TuioContainer {
     }
 
     /**
-     * Takes the atttibutes of the provided TuioObject and assigs these values
+     * Takes the attributes of the provided TuioObject and assigns these values
      * to this TuioObject. The TuioTime time stamp of this TuioContainer remains
      * unchanged.
      *

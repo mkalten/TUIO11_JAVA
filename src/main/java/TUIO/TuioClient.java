@@ -53,16 +53,22 @@ public class TuioClient implements OSCListener {
     private int port = 3333;
     private OSCPortIn oscPort;
     private boolean connected = false;
-    private final HashMap<Long, TuioObject> objectList = new HashMap<Long, TuioObject>();
-    private ArrayList<Long> aliveObjectList = new ArrayList<Long>();
-    private ArrayList<Long> newObjectList = new ArrayList<Long>();
-    private final HashMap<Long, TuioCursor> cursorList = new HashMap<Long, TuioCursor>();
-    private ArrayList<Long> aliveCursorList = new ArrayList<Long>();
-    private ArrayList<Long> newCursorList = new ArrayList<Long>();
-    private final HashMap<Long, TuioBlob> blobList = new HashMap<Long, TuioBlob>();
-    private ArrayList<Long> aliveBlobList = new ArrayList<Long>();
-    private ArrayList<Long> newBlobList = new ArrayList<Long>();
+    //objects
+    private final HashMap<Long, TuioObject> objectMap = new HashMap<Long, TuioObject>();
+    private final ArrayList<Long> aliveObjectList = new ArrayList<Long>();
+    private final ArrayList<Long> newObjectList = new ArrayList<Long>();
 
+    //cursors
+    private final HashMap<Long, TuioCursor> cursorMap = new HashMap<Long, TuioCursor>();
+    private final ArrayList<Long> aliveCursorList = new ArrayList<Long>();
+    private final ArrayList<Long> newCursorList = new ArrayList<Long>();
+
+    //blobs
+    private final HashMap<Long, TuioBlob> blobMap = new HashMap<Long, TuioBlob>();
+    private final ArrayList<Long> aliveBlobList = new ArrayList<Long>();
+    private final ArrayList<Long> newBlobList = new ArrayList<Long>();
+
+    //frames
     private final ArrayList<TuioObject> frameObjects = new ArrayList<TuioObject>();
     private final ArrayList<TuioCursor> frameCursors = new ArrayList<TuioCursor>();
     private final ArrayList<TuioBlob> frameBlobs = new ArrayList<TuioBlob>();
@@ -179,7 +185,7 @@ public class TuioClient implements OSCListener {
 //     */
 //    @Deprecated
 //    public ArrayList<TuioObject> getTuioObjects() {
-//        return new ArrayList<TuioObject>(objectList.values());
+//        return new ArrayList<TuioObject>(objectMap.values());
 //    }
 
     /**
@@ -188,7 +194,7 @@ public class TuioClient implements OSCListener {
      * @return an ArrayList of all currently active TuioObjects
      */
     public ArrayList<TuioObject> getTuioObjectList() {
-        return new ArrayList<TuioObject>(objectList.values());
+        return new ArrayList<TuioObject>(objectMap.values());
     }
 
 //    /**
@@ -199,7 +205,7 @@ public class TuioClient implements OSCListener {
 //     */
 //    @Deprecated
 //    public ArrayList<TuioCursor> getTuioCursors() {
-//        return new ArrayList<TuioCursor>(cursorList.values());
+//        return new ArrayList<TuioCursor>(cursorMap.values());
 //    }
 
     /**
@@ -208,7 +214,7 @@ public class TuioClient implements OSCListener {
      * @return an ArrayList of all currently active TuioCursors
      */
     public ArrayList<TuioCursor> getTuioCursorList() {
-        return new ArrayList<TuioCursor>(cursorList.values());
+        return new ArrayList<TuioCursor>(cursorMap.values());
     }
 
 //    /**
@@ -219,7 +225,7 @@ public class TuioClient implements OSCListener {
 //     */
 //    @Deprecated
 //    public ArrayList<TuioBlob> getTuioBlobs() {
-//        return new ArrayList<TuioBlob>(blobList.values());
+//        return new ArrayList<TuioBlob>(blobMap.values());
 //    }
 
     /**
@@ -228,7 +234,7 @@ public class TuioClient implements OSCListener {
      * @return an ArrayList of all currently active TuioBlobs
      */
     public ArrayList<TuioBlob> getTuioBlobList() {
-        return new ArrayList<TuioBlob>(blobList.values());
+        return new ArrayList<TuioBlob>(blobMap.values());
     }
 
     /**
@@ -240,7 +246,7 @@ public class TuioClient implements OSCListener {
      * NULL
      */
     public TuioObject getTuioObject(long s_id) {
-        return objectList.get(s_id);
+        return objectMap.get(s_id);
     }
 
     /**
@@ -252,7 +258,7 @@ public class TuioClient implements OSCListener {
      * NULL
      */
     public TuioCursor getTuioCursor(long s_id) {
-        return cursorList.get(s_id);
+        return cursorMap.get(s_id);
     }
 
     /**
@@ -264,7 +270,7 @@ public class TuioClient implements OSCListener {
      * NULL
      */
     public TuioBlob getTuioBlob(long s_id) {
-        return blobList.get(s_id);
+        return blobMap.get(s_id);
     }
 
     /**
@@ -295,14 +301,14 @@ public class TuioClient implements OSCListener {
                 float maccel = ((Float) args[9]);
                 float raccel = ((Float) args[10]);
 
-                if (objectList.get(s_id) == null) {
+                if (objectMap.get(s_id) == null) {
 
                     TuioObject addObject = new TuioObject(s_id, c_id, xpos, ypos, angle);
                     frameObjects.add(addObject);
 
                 } else {
 
-                    TuioObject tobj = objectList.get(s_id);
+                    TuioObject tobj = objectMap.get(s_id);
                     if (tobj == null) {
                         return;
                     }
@@ -323,14 +329,14 @@ public class TuioClient implements OSCListener {
                     long s_id = ((Integer) args[i]).longValue();
                     newObjectList.add(s_id);
                     // reduce the object list to the lost objects
-                    if (aliveObjectList.contains(s_id)) {
-                        aliveObjectList.remove(s_id);
+                    if (aliveObjectList.contains((Long) s_id)) {
+                        aliveObjectList.remove((Long) s_id);
                     }
                 }
 
                 // remove the remaining objects
                 for (Long aliveObjectList1 : aliveObjectList) {
-                    TuioObject removeObject = objectList.get(aliveObjectList1);
+                    TuioObject removeObject = objectMap.get(aliveObjectList1);
                     if (removeObject == null) {
                         continue;
                     }
@@ -363,17 +369,17 @@ public class TuioClient implements OSCListener {
                                 TuioObject removeObject = tobj;
                                 removeObject.remove(currentTime);
                                 listenerList.fire().removeTuioObject(removeObject);
-                                objectList.remove(removeObject.getSessionID());
+                                objectMap.remove((Long) removeObject.getSessionID());
                                 break;
 
                             case TuioObject.TUIO_ADDED:
                                 TuioObject addObject = new TuioObject(currentTime, tobj.getSessionID(), tobj.getSymbolID(), tobj.getX(), tobj.getY(), tobj.getAngle());
-                                objectList.put(addObject.getSessionID(), addObject);
+                                objectMap.put(addObject.getSessionID(), addObject);
                                 listenerList.fire().addTuioObject(addObject);
                                 break;
 
                             default:
-                                TuioObject updateObject = objectList.get(tobj.getSessionID());
+                                TuioObject updateObject = objectMap.get(tobj.getSessionID());
                                 if ((tobj.getX() != updateObject.getX() && tobj.getXSpeed() == 0) || (tobj.getY() != updateObject.getY() && tobj.getYSpeed() == 0)) {
                                     updateObject.update(currentTime, tobj.getX(), tobj.getY(), tobj.getAngle());
                                 } else {
@@ -386,10 +392,9 @@ public class TuioClient implements OSCListener {
 
                     listenerList.fire().refresh(new TuioTime(currentTime, fseq));
 
-                    ArrayList<Long> buffer = aliveObjectList;
-                    aliveObjectList = newObjectList;
-                    // recycling the vector
-                    newObjectList = buffer;
+                    aliveObjectList.clear();
+                    aliveObjectList.addAll(newObjectList);
+                    newObjectList.clear();
                 }
                 frameObjects.clear();
             }
@@ -404,14 +409,14 @@ public class TuioClient implements OSCListener {
                 float yspeed = ((Float) args[5]);
                 float maccel = ((Float) args[6]);
 
-                if (cursorList.get(s_id) == null) {
+                if (cursorMap.get(s_id) == null) {
 
                     TuioCursor addCursor = new TuioCursor(s_id, -1, xpos, ypos);
                     frameCursors.add(addCursor);
 
                 } else {
 
-                    TuioCursor tcur = cursorList.get(s_id);
+                    TuioCursor tcur = cursorMap.get(s_id);
                     if (tcur == null) {
                         return;
                     }
@@ -432,14 +437,14 @@ public class TuioClient implements OSCListener {
                     long s_id = ((Integer) args[i]).longValue();
                     newCursorList.add(s_id);
                     // reduce the cursor list to the lost cursors
-                    if (aliveCursorList.contains(s_id)) {
-                        aliveCursorList.remove(s_id);
+                    if (aliveCursorList.contains((Long) s_id)) {
+                        aliveCursorList.remove((Long) s_id);
                     }
                 }
 
                 // remove the remaining cursors
                 for (Long aliveCursorList1 : aliveCursorList) {
-                    TuioCursor removeCursor = cursorList.get(aliveCursorList1);
+                    TuioCursor removeCursor = cursorMap.get(aliveCursorList1);
                     if (removeCursor == null) {
                         continue;
                     }
@@ -473,19 +478,19 @@ public class TuioClient implements OSCListener {
                                 removeCursor.remove(currentTime);
                                 listenerList.fire().removeTuioCursor(removeCursor);
 
-                                cursorList.remove(removeCursor.getSessionID());
+                                cursorMap.remove((Long) removeCursor.getSessionID());
 
                                 if (removeCursor.getCursorID() == maxCursorID) {
                                     maxCursorID = -1;
-                                    if (cursorList.size() > 0) {
-                                        for (TuioCursor tc : cursorList.values()) {
+                                    if (cursorMap.size() > 0) {
+                                        for (TuioCursor tc : cursorMap.values()) {
                                             int c_id = tc.getCursorID();
                                             if (c_id > maxCursorID) {
                                                 maxCursorID = c_id;
                                             }
                                         }
 
-                                        for (TuioCursor tc : new ArrayList<TuioCursor>(cursorList.values())) {
+                                        for (TuioCursor tc : new ArrayList<TuioCursor>(cursorMap.values())) {
                                             int c_id = tc.getCursorID();
                                             if (c_id >= maxCursorID) {
                                                 freeCursorList.remove(tc);
@@ -502,8 +507,8 @@ public class TuioClient implements OSCListener {
 
                             case TuioCursor.TUIO_ADDED:
 
-                                int c_id = cursorList.size();
-                                if ((cursorList.size() <= maxCursorID) && (freeCursorList.size() > 0)) {
+                                int c_id = cursorMap.size();
+                                if ((cursorMap.size() <= maxCursorID) && (freeCursorList.size() > 0)) {
                                     TuioCursor closestCursor = freeCursorList.get(0);
                                     for (TuioCursor testCursor : freeCursorList) {
                                         if (testCursor.getDistance(tcur) < closestCursor.getDistance(tcur)) {
@@ -517,14 +522,14 @@ public class TuioClient implements OSCListener {
                                 }
 
                                 TuioCursor addCursor = new TuioCursor(currentTime, tcur.getSessionID(), c_id, tcur.getX(), tcur.getY());
-                                cursorList.put(addCursor.getSessionID(), addCursor);
+                                cursorMap.put(addCursor.getSessionID(), addCursor);
 
                                 listenerList.fire().addTuioCursor(addCursor);
                                 break;
 
                             default:
 
-                                TuioCursor updateCursor = cursorList.get(tcur.getSessionID());
+                                TuioCursor updateCursor = cursorMap.get(tcur.getSessionID());
                                 if ((tcur.getX() != updateCursor.getX() && tcur.getXSpeed() == 0) || (tcur.getY() != updateCursor.getY() && tcur.getYSpeed() == 0)) {
                                     updateCursor.update(currentTime, tcur.getX(), tcur.getY());
                                 } else {
@@ -537,10 +542,9 @@ public class TuioClient implements OSCListener {
 
                     listenerList.fire().refresh(new TuioTime(currentTime, fseq));
 
-                    ArrayList<Long> buffer = aliveCursorList;
-                    aliveCursorList = newCursorList;
-                    // recycling the vector
-                    newCursorList = buffer;
+                    aliveCursorList.clear();
+                    aliveCursorList.addAll(newCursorList);
+                    newCursorList.clear();
                 }
 
                 frameCursors.clear();
@@ -563,14 +567,14 @@ public class TuioClient implements OSCListener {
                 float maccel = ((Float) args[11]);
                 float raccel = ((Float) args[12]);
 
-                if (blobList.get(s_id) == null) {
+                if (blobMap.get(s_id) == null) {
 
                     TuioBlob addBlob = new TuioBlob(s_id, -1, xpos, ypos, angle, width, height, area);
                     frameBlobs.add(addBlob);
 
                 } else {
 
-                    TuioBlob tblb = blobList.get(s_id);
+                    TuioBlob tblb = blobMap.get(s_id);
                     if (tblb == null) {
                         return;
                     }
@@ -591,14 +595,14 @@ public class TuioClient implements OSCListener {
                     long s_id = ((Integer) args[i]).longValue();
                     newBlobList.add(s_id);
                     // reduce the blob list to the lost blobs
-                    if (aliveBlobList.contains(s_id)) {
-                        aliveBlobList.remove(s_id);
+                    if (aliveBlobList.contains((Long) s_id)) {
+                        aliveBlobList.remove((Long) s_id);
                     }
                 }
 
                 // remove the remaining blobs
                 for (Long aliveBlobList1 : aliveBlobList) {
-                    TuioBlob removeBlob = blobList.get(aliveBlobList1);
+                    TuioBlob removeBlob = blobMap.get(aliveBlobList1);
                     if (removeBlob == null) {
                         continue;
                     }
@@ -632,12 +636,12 @@ public class TuioClient implements OSCListener {
 
                                 listenerList.fire().removeTuioBlob(removeBlob);
 
-                                blobList.remove(removeBlob.getSessionID());
+                                blobMap.remove((Long) removeBlob.getSessionID());
 
                                 if (removeBlob.getBlobID() == maxBlobID) {
                                     maxBlobID = -1;
-                                    if (blobList.size() > 0) {
-                                        for (TuioBlob tb : blobList.values()) {
+                                    if (blobMap.size() > 0) {
+                                        for (TuioBlob tb : blobMap.values()) {
                                             int b_id = tb.getBlobID();
                                             if (b_id > maxBlobID) {
                                                 maxBlobID = b_id;
@@ -660,8 +664,8 @@ public class TuioClient implements OSCListener {
                                 break;
 
                             case TuioBlob.TUIO_ADDED:
-                                int b_id = blobList.size();
-                                if ((blobList.size() <= maxBlobID) && (freeBlobList.size() > 0)) {
+                                int b_id = blobMap.size();
+                                if ((blobMap.size() <= maxBlobID) && (freeBlobList.size() > 0)) {
                                     TuioBlob closestBlob = freeBlobList.get(0);
                                     for (TuioBlob testBlob : freeBlobList) {
                                         if (testBlob.getDistance(tblb) < closestBlob.getDistance(tblb)) {
@@ -675,13 +679,13 @@ public class TuioClient implements OSCListener {
                                 }
 
                                 TuioBlob addBlob = new TuioBlob(currentTime, tblb.getSessionID(), b_id, tblb.getX(), tblb.getY(), tblb.getAngle(), tblb.getWidth(), tblb.getHeight(), tblb.getArea());
-                                blobList.put(addBlob.getSessionID(), addBlob);
+                                blobMap.put(addBlob.getSessionID(), addBlob);
 
                                 listenerList.fire().addTuioBlob(addBlob);
                                 break;
 
                             default:
-                                TuioBlob updateBlob = blobList.get(tblb.getSessionID());
+                                TuioBlob updateBlob = blobMap.get(tblb.getSessionID());
                                 if ((tblb.getX() != updateBlob.getX() && tblb.getXSpeed() == 0) || (tblb.getY() != updateBlob.getY() && tblb.getYSpeed() == 0)) {
                                     updateBlob.update(currentTime, tblb.getX(), tblb.getY(), tblb.getAngle(), tblb.getWidth(), tblb.getHeight(), tblb.getArea());
                                 } else {
@@ -694,10 +698,9 @@ public class TuioClient implements OSCListener {
 
                     listenerList.fire().refresh(new TuioTime(currentTime, fseq));
 
-                    ArrayList<Long> buffer = aliveBlobList;
-                    aliveBlobList = newBlobList;
-                    // recycling the vector
-                    newBlobList = buffer;
+                    aliveBlobList.clear();
+                    aliveBlobList.addAll(newBlobList);
+                    newBlobList.clear();
                 }
 
                 frameBlobs.clear();

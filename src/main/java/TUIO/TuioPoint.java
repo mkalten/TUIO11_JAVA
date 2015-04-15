@@ -35,11 +35,11 @@ package TUIO;
 public class TuioPoint {
 
     /**
-     * X coordinate, representated as a floating point value in a range of 0..1
+     * X coordinate, represented as a floating point value in a range of 0..1
      */
     protected float xpos;
     /**
-     * Y coordinate, representated as a floating point value in a range of 0..1
+     * Y coordinate, represented as a floating point value in a range of 0..1
      */
     protected float ypos;
     /**

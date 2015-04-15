@@ -25,14 +25,14 @@
 package TUIO;
 
 /**
- * The TuioTime class is a simple structure that is used to reprent the time
+ * The TuioTime class is a simple structure that is used to represent the time
  * that has elapsed since the session start. The time is internally represented
  * as seconds and fractions of microseconds which should be more than sufficient
  * for gesture related timing requirements. Therefore at the beginning of a
  * typical TUIO session the static method initSession() will set the reference
  * time for the session. Another important static method getSessionTime will
  * return a TuioTime object representing the time elapsed since the session
- * start. The class also provides various addtional convience method, which
+ * start. The class also provides various additional convenience method, which
  * allow some simple time arithmetics.
  *
  * @author Martin Kaltenbrunner
@@ -72,9 +72,9 @@ public class TuioTime {
 
     /**
      * This constructor takes the provided time represented in total
-     * Milliseconds and assigs this value to the newly created TuioTime.
+     * Milliseconds and assigns this value to the newly created TuioTime.
      *
-     * @param msec the total time in Millseconds
+     * @param msec the total time in Milliseconds
      */
     public TuioTime(long msec) {
         this.seconds = msec / 1000;
@@ -83,7 +83,7 @@ public class TuioTime {
 
     /**
      * This constructor takes the provided time represented in Seconds and
-     * Microseconds and assigs these value to the newly created TuioTime.
+     * Microseconds and assigns these value to the newly created TuioTime.
      *
      * @param sec the total time in seconds
      * @param usec	the microseconds time component
@@ -94,7 +94,7 @@ public class TuioTime {
     }
 
     /**
-     * This constructor takes the provided TuioTime and assigs its Seconds and
+     * This constructor takes the provided TuioTime and assigns its Seconds and
      * Microseconds values to the newly created TuioTime.
      *
      * @param ttime the TuioTime used to copy
@@ -105,7 +105,7 @@ public class TuioTime {
     }
 
     /**
-     * This constructor takes the provided TuioTime and assigs its Seconds and
+     * This constructor takes the provided TuioTime and assigns its Seconds and
      * Microseconds values to the newly created TuioTime.
      *
      * @param ttime the TuioTime used to copy
@@ -254,18 +254,18 @@ public class TuioTime {
     }
 
     /**
-     * Returns the absolut TuioTime representing the session start.
+     * Returns the absolute TuioTime representing the session start.
      *
-     * @return the absolut TuioTime representing the session start
+     * @return the absolute TuioTime representing the session start
      */
     public static TuioTime getStartTime() {
         return new TuioTime(start_seconds, start_micro_seconds);
     }
 
     /**
-     * Returns the absolut TuioTime representing the current system time.
+     * Returns the absolute TuioTime representing the current system time.
      *
-     * @return the absolut TuioTime representing the current system time
+     * @return the absolute TuioTime representing the current system time
      */
     public static TuioTime getSystemTime() {
         long usec = System.nanoTime() / 1000;

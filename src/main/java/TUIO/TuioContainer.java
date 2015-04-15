@@ -117,7 +117,7 @@ abstract class TuioContainer extends TuioPoint {
 
     /**
      * This constructor takes the provided Session ID, X and Y coordinate and
-     * assigs these values to the newly created TuioContainer.
+     * assigns these values to the newly created TuioContainer.
      *
      * @param	si	the Session ID to assign
      * @param	xp	the X coordinate to assign
@@ -138,8 +138,8 @@ abstract class TuioContainer extends TuioPoint {
     }
 
     /**
-     * This constructor takes the atttibutes of the provided TuioContainer and
-     * assigs these values to the newly created TuioContainer.
+     * This constructor takes the attributes of the provided TuioContainer and
+     * assigns these values to the newly created TuioContainer.
      *
      * @param	tcon	the TuioContainer to assign
      */
@@ -273,7 +273,7 @@ abstract class TuioContainer extends TuioPoint {
     }
 
     /**
-     * Takes the atttibutes of the provided TuioContainer and assigs these
+     * Takes the attributes of the provided TuioContainer and assigns these
      * values to this TuioContainer. The TuioTime time stamp of this
      * TuioContainer remains unchanged.
      *

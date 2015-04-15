@@ -24,10 +24,12 @@
  */
 package com.illposed.osc;
 
-import java.net.*;
 import java.io.IOException;
 import com.illposed.osc.utility.OSCByteArrayToJavaConverter;
 import com.illposed.osc.utility.OSCPacketDispatcher;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.SocketException;
 import org.apache.commons.logging.LogFactory;
 
 public class OSCPortIn extends OSCPort implements Runnable {

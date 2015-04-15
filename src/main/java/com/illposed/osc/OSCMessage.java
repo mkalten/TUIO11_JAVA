@@ -12,9 +12,8 @@
  */
 package com.illposed.osc;
 
+import com.illposed.osc.utility.OSCJavaToByteArrayConverter;
 import java.util.ArrayList;
-
-import com.illposed.osc.utility.*;
 
 public class OSCMessage extends OSCPacket {
 

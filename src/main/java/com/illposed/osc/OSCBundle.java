@@ -14,13 +14,12 @@
  */
 package com.illposed.osc;
 
+import com.illposed.osc.utility.OSCJavaToByteArrayConverter;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.ArrayList;
-
-import com.illposed.osc.utility.*;
-import java.util.Arrays;
 
 public class OSCBundle extends OSCPacket {
 
