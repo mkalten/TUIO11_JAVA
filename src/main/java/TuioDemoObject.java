@@ -63,6 +63,7 @@ public class TuioDemoObject extends TuioObject {
         g.drawString(symbol_id + "", Xpos - 10, Ypos);
     }
 
+    @Override
     public void update(TuioObject tobj) {
 
         float dx = tobj.getX() - xpos;

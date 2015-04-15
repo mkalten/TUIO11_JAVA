@@ -63,6 +63,7 @@ public class TuioDemoBlob extends TuioBlob {
         g.drawString(blob_id + "", Xpos - 10, Ypos);
     }
 
+    @Override
     public void update(TuioBlob tblb) {
 
         float dx = tblb.getX() - xpos;

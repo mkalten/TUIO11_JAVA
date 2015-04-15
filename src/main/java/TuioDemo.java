@@ -70,12 +70,7 @@ public final class TuioDemo {
         frame.setTitle("TuioDemo");
         frame.setResizable(false);
 
-        frame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent evt) {
-                System.exit(0);
-            }
-        });
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         frame.addKeyListener(new KeyAdapter() {
             @Override
