@@ -8,6 +8,33 @@
     <name>tuio-lib</name>
     <url>http://tuio.org/</url>
     <description>TUIO 1.1 Java Reference Implementation</description>
+    <profiles>
+        <profile>
+            <id>demo</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>1.9.1</version>
+                        <executions>
+                            <execution>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/demo/java</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     <build>
         <plugins>
             <plugin>
@@ -37,7 +64,7 @@
                 <configuration>
                     <showDeprecation>true</showDeprecation>
                 </configuration>
-            </plugin>
+            </plugin>    
         </plugins>
         <resources>
             <resource>
