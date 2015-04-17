@@ -25,11 +25,13 @@ package TUIO;
 import com.illposed.osc.OSCListener;
 import com.illposed.osc.OSCMessage;
 import com.illposed.osc.OSCPortIn;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import org.apache.commons.lang3.event.EventListenerSupport;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * The TuioClient class is the central TUIO protocol decoder component. It
@@ -579,7 +581,7 @@ public class TuioClient {
             oscPort.startListening();
             connected = true;
         } catch (Exception e) {
-            System.out.println("TuioClient: failed to connect to port " + port);
+            LogFactory.getLog(TuioClient.class).fatal(MessageFormat.format("Failed to connect to port: {0}", new Object[]{Integer.toString(port)}));
             connected = false;
         }
     }
