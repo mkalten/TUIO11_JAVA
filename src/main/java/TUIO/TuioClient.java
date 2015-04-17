@@ -1,27 +1,25 @@
 /**
- * TUIO Java Console Example
- * Copyright (c) 2005-2014 Martin Kaltenbrunner <martin@tuio.org>
+ * TUIO Java Console Example Copyright (c) 2005-2014 Martin Kaltenbrunner
+ * <martin@tuio.org>
  *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files
- * (the "Software"), to deal in the Software without restriction,
- * including without limitation the rights to use, copy, modify, merge,
- * publish, distribute, sublicense, and/or sell copies of the Software,
- * and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR
- * ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
- * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
-
 package TUIO;
 
 import com.illposed.osc.OSCListener;
@@ -30,6 +28,7 @@ import com.illposed.osc.OSCPortIn;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import org.apache.commons.lang3.event.EventListenerSupport;
 
 /**
@@ -48,35 +47,15 @@ import org.apache.commons.lang3.event.EventListenerSupport;
  * @author Martin Kaltenbrunner
  * @version 1.1.0
  */
-public class TuioClient implements OSCListener {
+public class TuioClient {
 
     private int port = 3333;
     private OSCPortIn oscPort;
     private boolean connected = false;
-    //objects
+
     private final HashMap<Long, TuioObject> objectMap = new HashMap<Long, TuioObject>();
-    private final ArrayList<Long> aliveObjectList = new ArrayList<Long>();
-    private final ArrayList<Long> newObjectList = new ArrayList<Long>();
-
-    //cursors
     private final HashMap<Long, TuioCursor> cursorMap = new HashMap<Long, TuioCursor>();
-    private final ArrayList<Long> aliveCursorList = new ArrayList<Long>();
-    private final ArrayList<Long> newCursorList = new ArrayList<Long>();
-
-    //blobs
     private final HashMap<Long, TuioBlob> blobMap = new HashMap<Long, TuioBlob>();
-    private final ArrayList<Long> aliveBlobList = new ArrayList<Long>();
-    private final ArrayList<Long> newBlobList = new ArrayList<Long>();
-
-    //frames
-    private final ArrayList<TuioObject> frameObjects = new ArrayList<TuioObject>();
-    private final ArrayList<TuioCursor> frameCursors = new ArrayList<TuioCursor>();
-    private final ArrayList<TuioBlob> frameBlobs = new ArrayList<TuioBlob>();
-
-    private final ArrayList<TuioCursor> freeCursorList = new ArrayList<TuioCursor>();
-    private int maxCursorID = -1;
-    private final ArrayList<TuioBlob> freeBlobList = new ArrayList<TuioBlob>();
-    private int maxBlobID = -1;
 
     private long currentFrame = 0;
     private TuioTime currentTime;
@@ -85,209 +64,24 @@ public class TuioClient implements OSCListener {
             = EventListenerSupport.create(TuioListener.class);
 
     /**
-     * The default constructor creates a client that listens to the default TUIO
-     * port 3333
+     * Listens only on the object channel.
      */
-    public TuioClient() {
-    }
+    private class ObjListener2D implements OSCListener {
 
-    /**
-     * This constructor creates a client that listens to the provided port
-     *
-     * @param port the listening port number
-     */
-    public TuioClient(int port) {
-        this.port = port;
-    }
+        private final ArrayList<TuioObject> frameObjects = new ArrayList<TuioObject>();
+        private final ArrayList<Long> aliveObjectList = new ArrayList<Long>();
+        private final ArrayList<Long> newObjectList = new ArrayList<Long>();
 
-    /**
-     * The TuioClient starts listening to TUIO messages on the configured UDP
-     * port All reveived TUIO messages are decoded and the resulting TUIO events
-     * are broadcasted to all registered TuioListeners
-     */
-    public void connect() {
-
-        TuioTime.initSession();
-        currentTime = new TuioTime();
-        currentTime.reset();
-
-        try {
-            oscPort = new OSCPortIn(port);
-            oscPort.addListener("/tuio/2Dobj", this);
-            oscPort.addListener("/tuio/2Dcur", this);
-            oscPort.addListener("/tuio/2Dblb", this);
-            oscPort.startListening();
-            connected = true;
-        } catch (Exception e) {
-            System.out.println("TuioClient: failed to connect to port " + port);
-            connected = false;
-        }
-    }
-
-    /**
-     * The TuioClient stops listening to TUIO messages on the configured UDP
-     * port
-     */
-    public void disconnect() {
-        oscPort.stopListening();
-        try {
-            Thread.sleep(100);
-        } catch (Exception e) {
-        }
-        oscPort.close();
-        connected = false;
-    }
-
-    /**
-     * Returns true if this TuioClient is currently connected.
-     *
-     * @return	true if this TuioClient is currently connected
-     */
-    public boolean isConnected() {
-        return connected;
-    }
-
-    /**
-     * Adds the provided TuioListener to the list of registered TUIO event
-     * listeners
-     *
-     * @param listener the TuioListener to add
-     */
-    public void addTuioListener(TuioListener listener) {
-        listenerList.addListener(listener);
-    }
-
-    /**
-     * Removes the provided TuioListener from the list of registered TUIO event
-     * listeners
-     *
-     * @param listener the TuioListener to remove
-     */
-    public void removeTuioListener(TuioListener listener) {
-        listenerList.removeListener(listener);
-    }
-
-    /**
-     * Removes all TuioListener from the list of registered TUIO event listeners
-     */
-    public void removeAllTuioListeners() {
-        TuioListener[] listeners = listenerList.getListeners();
-        for (TuioListener l : listeners) {
-            listenerList.removeListener(l);
-        }
-    }
-
-//    /**
-//     * Returns a ArrayList of all currently active TuioObjects
-//     *
-//     * @return a ArrayList of all currently active TuioObjects
-//     * @deprecated use {@link #getTuioObjectList()} instead.
-//     */
-//    @Deprecated
-//    public ArrayList<TuioObject> getTuioObjects() {
-//        return new ArrayList<TuioObject>(objectMap.values());
-//    }
-
-    /**
-     * Returns an ArrayList of all currently active TuioObjects
-     *
-     * @return an ArrayList of all currently active TuioObjects
-     */
-    public ArrayList<TuioObject> getTuioObjectList() {
-        return new ArrayList<TuioObject>(objectMap.values());
-    }
-
-//    /**
-//     * Returns a ArrayList of all currently active TuioCursors
-//     *
-//     * @return a ArrayList of all currently active TuioCursors
-//     * @deprecated use {@link #getTuioCursorList()} instead.
-//     */
-//    @Deprecated
-//    public ArrayList<TuioCursor> getTuioCursors() {
-//        return new ArrayList<TuioCursor>(cursorMap.values());
-//    }
-
-    /**
-     * Returns an ArrayList of all currently active TuioCursors
-     *
-     * @return an ArrayList of all currently active TuioCursors
-     */
-    public ArrayList<TuioCursor> getTuioCursorList() {
-        return new ArrayList<TuioCursor>(cursorMap.values());
-    }
-
-//    /**
-//     * Returns a ArrayList of all currently active TuioBlobs
-//     *
-//     * @return a ArrayList of all currently active TuioBlobs
-//     * @deprecated use {@link #getTuioBlobList()} instead.
-//     */
-//    @Deprecated
-//    public ArrayList<TuioBlob> getTuioBlobs() {
-//        return new ArrayList<TuioBlob>(blobMap.values());
-//    }
-
-    /**
-     * Returns an ArrayList of all currently active TuioBlobs
-     *
-     * @return an ArrayList of all currently active TuioBlobs
-     */
-    public ArrayList<TuioBlob> getTuioBlobList() {
-        return new ArrayList<TuioBlob>(blobMap.values());
-    }
-
-    /**
-     * Returns the TuioObject corresponding to the provided Session ID or NULL
-     * if the Session ID does not refer to an active TuioObject
-     *
-     * @param	s_id	the Session ID of the required TuioObject
-     * @return an active TuioObject corresponding to the provided Session ID or
-     * NULL
-     */
-    public TuioObject getTuioObject(long s_id) {
-        return objectMap.get(s_id);
-    }
-
-    /**
-     * Returns the TuioCursor corresponding to the provided Session ID or NULL
-     * if the Session ID does not refer to an active TuioCursor
-     *
-     * @param	s_id	the Session ID of the required TuioCursor
-     * @return an active TuioCursor corresponding to the provided Session ID or
-     * NULL
-     */
-    public TuioCursor getTuioCursor(long s_id) {
-        return cursorMap.get(s_id);
-    }
-
-    /**
-     * Returns the TuioBlob corresponding to the provided Session ID or NULL if
-     * the Session ID does not refer to an active TuioBlob
-     *
-     * @param	s_id	the Session ID of the required TuioBlob
-     * @return an active TuioBlob corresponding to the provided Session ID or
-     * NULL
-     */
-    public TuioBlob getTuioBlob(long s_id) {
-        return blobMap.get(s_id);
-    }
-
-    /**
-     * The OSC callback method where all TUIO messages are received and decoded
-     * and where the TUIO event callbacks are dispatched
-     *
-     * @param date	the time stamp of the OSC bundle
-     * @param message	the received OSC message
-     */
-    public void acceptMessage(Date date, OSCMessage message) {
-
-        Object[] args = message.getArguments();
-        String command = (String) args[0];
-        String address = message.getAddress();
-
-        if (address.equals("/tuio/2Dobj")) {
-
+        /**
+         * The OSC callback method where all TUIO messages are received and
+         * decoded and where the TUIO event call-backs are dispatched.
+         *
+         * @param date	the time stamp of the OSC bundle
+         * @param message	the received OSC message
+         */
+        public void acceptMessage(Date date, OSCMessage oscm) {
+            Object[] args = oscm.getArguments();
+            String command = (String) args[0];
             if (command.equals("set")) {
 
                 long s_id = ((Integer) args[1]).longValue();
@@ -301,14 +95,14 @@ public class TuioClient implements OSCListener {
                 float maccel = ((Float) args[9]);
                 float raccel = ((Float) args[10]);
 
-                if (objectMap.get(s_id) == null) {
+                if (TuioClient.this.objectMap.get(s_id) == null) {
 
                     TuioObject addObject = new TuioObject(s_id, c_id, xpos, ypos, angle);
                     frameObjects.add(addObject);
 
                 } else {
 
-                    TuioObject tobj = objectMap.get(s_id);
+                    TuioObject tobj = TuioClient.this.objectMap.get(s_id);
                     if (tobj == null) {
                         return;
                     }
@@ -336,11 +130,11 @@ public class TuioClient implements OSCListener {
 
                 // remove the remaining objects
                 for (Long aliveObjectList1 : aliveObjectList) {
-                    TuioObject removeObject = objectMap.get(aliveObjectList1);
+                    TuioObject removeObject = TuioClient.this.objectMap.get(aliveObjectList1);
                     if (removeObject == null) {
                         continue;
                     }
-                    removeObject.remove(currentTime);
+                    removeObject.remove(TuioClient.this.currentTime);
                     frameObjects.add(removeObject);
                 }
 
@@ -350,16 +144,16 @@ public class TuioClient implements OSCListener {
                 boolean lateFrame = false;
 
                 if (fseq > 0) {
-                    if (fseq > currentFrame) {
-                        currentTime = TuioTime.getSessionTime();
+                    if (fseq > TuioClient.this.currentFrame) {
+                        TuioClient.this.currentTime = TuioTime.getSessionTime();
                     }
-                    if ((fseq >= currentFrame) || ((currentFrame - fseq) > 100)) {
-                        currentFrame = fseq;
+                    if ((fseq >= TuioClient.this.currentFrame) || ((TuioClient.this.currentFrame - fseq) > 100)) {
+                        TuioClient.this.currentFrame = fseq;
                     } else {
                         lateFrame = true;
                     }
-                } else if (TuioTime.getSessionTime().subtract(currentTime).getTotalMilliseconds() > 100) {
-                    currentTime = TuioTime.getSessionTime();
+                } else if (TuioTime.getSessionTime().subtract(TuioClient.this.currentTime).getTotalMilliseconds() > 100) {
+                    TuioClient.this.currentTime = TuioTime.getSessionTime();
                 }
 
                 if (!lateFrame) {
@@ -367,30 +161,30 @@ public class TuioClient implements OSCListener {
                         switch (tobj.getTuioState()) {
                             case TuioObject.TUIO_REMOVED:
                                 TuioObject removeObject = tobj;
-                                removeObject.remove(currentTime);
-                                listenerList.fire().removeTuioObject(removeObject);
-                                objectMap.remove((Long) removeObject.getSessionID());
+                                removeObject.remove(TuioClient.this.currentTime);
+                                TuioClient.this.listenerList.fire().removeTuioObject(removeObject);
+                                TuioClient.this.objectMap.remove((Long) removeObject.getSessionID());
                                 break;
 
                             case TuioObject.TUIO_ADDED:
-                                TuioObject addObject = new TuioObject(currentTime, tobj.getSessionID(), tobj.getSymbolID(), tobj.getX(), tobj.getY(), tobj.getAngle());
-                                objectMap.put(addObject.getSessionID(), addObject);
-                                listenerList.fire().addTuioObject(addObject);
+                                TuioObject addObject = new TuioObject(TuioClient.this.currentTime, tobj.getSessionID(), tobj.getSymbolID(), tobj.getX(), tobj.getY(), tobj.getAngle());
+                                TuioClient.this.objectMap.put(addObject.getSessionID(), addObject);
+                                TuioClient.this.listenerList.fire().addTuioObject(addObject);
                                 break;
 
                             default:
-                                TuioObject updateObject = objectMap.get(tobj.getSessionID());
+                                TuioObject updateObject = TuioClient.this.objectMap.get(tobj.getSessionID());
                                 if ((tobj.getX() != updateObject.getX() && tobj.getXSpeed() == 0) || (tobj.getY() != updateObject.getY() && tobj.getYSpeed() == 0)) {
-                                    updateObject.update(currentTime, tobj.getX(), tobj.getY(), tobj.getAngle());
+                                    updateObject.update(TuioClient.this.currentTime, tobj.getX(), tobj.getY(), tobj.getAngle());
                                 } else {
-                                    updateObject.update(currentTime, tobj.getX(), tobj.getY(), tobj.getAngle(), tobj.getXSpeed(), tobj.getYSpeed(), tobj.getRotationSpeed(), tobj.getMotionAccel(), tobj.getRotationAccel());
+                                    updateObject.update(TuioClient.this.currentTime, tobj.getX(), tobj.getY(), tobj.getAngle(), tobj.getXSpeed(), tobj.getYSpeed(), tobj.getRotationSpeed(), tobj.getMotionAccel(), tobj.getRotationAccel());
                                 }
 
-                                listenerList.fire().updateTuioObject(updateObject);
+                                TuioClient.this.listenerList.fire().updateTuioObject(updateObject);
                         }
                     }
 
-                    listenerList.fire().refresh(new TuioTime(currentTime, fseq));
+                    TuioClient.this.listenerList.fire().refresh(new TuioTime(TuioClient.this.currentTime, fseq));
 
                     aliveObjectList.clear();
                     aliveObjectList.addAll(newObjectList);
@@ -398,8 +192,30 @@ public class TuioClient implements OSCListener {
                 }
                 frameObjects.clear();
             }
-        } else if (address.equals("/tuio/2Dcur")) {
+        }
+    }
 
+    /**
+     * Listens only on the cursor channel.
+     */
+    private class CurListener2D implements OSCListener {
+
+        private final ArrayList<TuioCursor> frameCursors = new ArrayList<TuioCursor>();
+        private final ArrayList<Long> aliveCursorList = new ArrayList<Long>();
+        private final ArrayList<Long> newCursorList = new ArrayList<Long>();
+        private final ArrayList<TuioCursor> freeCursorList = new ArrayList<TuioCursor>();
+        private int maxCursorID = -1;
+
+        /**
+         * The OSC callback method where all TUIO messages are received and
+         * decoded and where the TUIO event call-backs are dispatched.
+         *
+         * @param date	the time stamp of the OSC bundle
+         * @param message	the received OSC message
+         */
+        public void acceptMessage(Date date, OSCMessage oscm) {
+            Object[] args = oscm.getArguments();
+            String command = (String) args[0];
             if (command.equals("set")) {
 
                 long s_id = ((Integer) args[1]).longValue();
@@ -409,14 +225,14 @@ public class TuioClient implements OSCListener {
                 float yspeed = ((Float) args[5]);
                 float maccel = ((Float) args[6]);
 
-                if (cursorMap.get(s_id) == null) {
+                if (TuioClient.this.cursorMap.get(s_id) == null) {
 
                     TuioCursor addCursor = new TuioCursor(s_id, -1, xpos, ypos);
                     frameCursors.add(addCursor);
 
                 } else {
 
-                    TuioCursor tcur = cursorMap.get(s_id);
+                    TuioCursor tcur = TuioClient.this.cursorMap.get(s_id);
                     if (tcur == null) {
                         return;
                     }
@@ -444,11 +260,11 @@ public class TuioClient implements OSCListener {
 
                 // remove the remaining cursors
                 for (Long aliveCursorList1 : aliveCursorList) {
-                    TuioCursor removeCursor = cursorMap.get(aliveCursorList1);
+                    TuioCursor removeCursor = TuioClient.this.cursorMap.get(aliveCursorList1);
                     if (removeCursor == null) {
                         continue;
                     }
-                    removeCursor.remove(currentTime);
+                    removeCursor.remove(TuioClient.this.currentTime);
                     frameCursors.add(removeCursor);
                 }
 
@@ -457,16 +273,16 @@ public class TuioClient implements OSCListener {
                 boolean lateFrame = false;
 
                 if (fseq > 0) {
-                    if (fseq > currentFrame) {
-                        currentTime = TuioTime.getSessionTime();
+                    if (fseq > TuioClient.this.currentFrame) {
+                        TuioClient.this.currentTime = TuioTime.getSessionTime();
                     }
-                    if ((fseq >= currentFrame) || ((currentFrame - fseq) > 100)) {
-                        currentFrame = fseq;
+                    if ((fseq >= TuioClient.this.currentFrame) || ((TuioClient.this.currentFrame - fseq) > 100)) {
+                        TuioClient.this.currentFrame = fseq;
                     } else {
                         lateFrame = true;
                     }
-                } else if (TuioTime.getSessionTime().subtract(currentTime).getTotalMilliseconds() > 100) {
-                    currentTime = TuioTime.getSessionTime();
+                } else if (TuioTime.getSessionTime().subtract(TuioClient.this.currentTime).getTotalMilliseconds() > 100) {
+                    TuioClient.this.currentTime = TuioTime.getSessionTime();
                 }
                 if (!lateFrame) {
 
@@ -475,22 +291,22 @@ public class TuioClient implements OSCListener {
                             case TuioCursor.TUIO_REMOVED:
 
                                 TuioCursor removeCursor = tcur;
-                                removeCursor.remove(currentTime);
-                                listenerList.fire().removeTuioCursor(removeCursor);
+                                removeCursor.remove(TuioClient.this.currentTime);
+                                TuioClient.this.listenerList.fire().removeTuioCursor(removeCursor);
 
-                                cursorMap.remove((Long) removeCursor.getSessionID());
+                                TuioClient.this.cursorMap.remove((Long) removeCursor.getSessionID());
 
                                 if (removeCursor.getCursorID() == maxCursorID) {
                                     maxCursorID = -1;
-                                    if (cursorMap.size() > 0) {
-                                        for (TuioCursor tc : cursorMap.values()) {
+                                    if (TuioClient.this.cursorMap.size() > 0) {
+                                        for (TuioCursor tc : TuioClient.this.cursorMap.values()) {
                                             int c_id = tc.getCursorID();
                                             if (c_id > maxCursorID) {
                                                 maxCursorID = c_id;
                                             }
                                         }
 
-                                        for (TuioCursor tc : new ArrayList<TuioCursor>(cursorMap.values())) {
+                                        for (TuioCursor tc : new ArrayList<TuioCursor>(TuioClient.this.cursorMap.values())) {
                                             int c_id = tc.getCursorID();
                                             if (c_id >= maxCursorID) {
                                                 freeCursorList.remove(tc);
@@ -507,8 +323,8 @@ public class TuioClient implements OSCListener {
 
                             case TuioCursor.TUIO_ADDED:
 
-                                int c_id = cursorMap.size();
-                                if ((cursorMap.size() <= maxCursorID) && (freeCursorList.size() > 0)) {
+                                int c_id = TuioClient.this.cursorMap.size();
+                                if ((TuioClient.this.cursorMap.size() <= maxCursorID) && (freeCursorList.size() > 0)) {
                                     TuioCursor closestCursor = freeCursorList.get(0);
                                     for (TuioCursor testCursor : freeCursorList) {
                                         if (testCursor.getDistance(tcur) < closestCursor.getDistance(tcur)) {
@@ -521,26 +337,26 @@ public class TuioClient implements OSCListener {
                                     maxCursorID = c_id;
                                 }
 
-                                TuioCursor addCursor = new TuioCursor(currentTime, tcur.getSessionID(), c_id, tcur.getX(), tcur.getY());
-                                cursorMap.put(addCursor.getSessionID(), addCursor);
+                                TuioCursor addCursor = new TuioCursor(TuioClient.this.currentTime, tcur.getSessionID(), c_id, tcur.getX(), tcur.getY());
+                                TuioClient.this.cursorMap.put(addCursor.getSessionID(), addCursor);
 
-                                listenerList.fire().addTuioCursor(addCursor);
+                                TuioClient.this.listenerList.fire().addTuioCursor(addCursor);
                                 break;
 
                             default:
 
-                                TuioCursor updateCursor = cursorMap.get(tcur.getSessionID());
+                                TuioCursor updateCursor = TuioClient.this.cursorMap.get(tcur.getSessionID());
                                 if ((tcur.getX() != updateCursor.getX() && tcur.getXSpeed() == 0) || (tcur.getY() != updateCursor.getY() && tcur.getYSpeed() == 0)) {
-                                    updateCursor.update(currentTime, tcur.getX(), tcur.getY());
+                                    updateCursor.update(TuioClient.this.currentTime, tcur.getX(), tcur.getY());
                                 } else {
-                                    updateCursor.update(currentTime, tcur.getX(), tcur.getY(), tcur.getXSpeed(), tcur.getYSpeed(), tcur.getMotionAccel());
+                                    updateCursor.update(TuioClient.this.currentTime, tcur.getX(), tcur.getY(), tcur.getXSpeed(), tcur.getYSpeed(), tcur.getMotionAccel());
                                 }
 
-                                listenerList.fire().updateTuioCursor(updateCursor);
+                                TuioClient.this.listenerList.fire().updateTuioCursor(updateCursor);
                         }
                     }
 
-                    listenerList.fire().refresh(new TuioTime(currentTime, fseq));
+                    TuioClient.this.listenerList.fire().refresh(new TuioTime(TuioClient.this.currentTime, fseq));
 
                     aliveCursorList.clear();
                     aliveCursorList.addAll(newCursorList);
@@ -549,11 +365,31 @@ public class TuioClient implements OSCListener {
 
                 frameCursors.clear();
             }
+        }
+    }
 
-        } else if (address.equals("/tuio/2Dblb")) {
+    /**
+     * Listens only on the blob channel.
+     */
+    private class BlobListener2D implements OSCListener {
 
+        private final ArrayList<TuioBlob> frameBlobs = new ArrayList<TuioBlob>();
+        private final ArrayList<Long> aliveBlobList = new ArrayList<Long>();
+        private final ArrayList<Long> newBlobList = new ArrayList<Long>();
+        private final ArrayList<TuioBlob> freeBlobList = new ArrayList<TuioBlob>();
+        private int maxBlobID = -1;
+
+        /**
+         * The OSC callback method where all TUIO messages are received and
+         * decoded and where the TUIO event call-backs are dispatched.
+         *
+         * @param date	the time stamp of the OSC bundle
+         * @param message	the received OSC message
+         */
+        public void acceptMessage(Date date, OSCMessage oscm) {
+            Object[] args = oscm.getArguments();
+            String command = (String) args[0];
             if (command.equals("set")) {
-
                 long s_id = ((Integer) args[1]).longValue();
                 float xpos = ((Float) args[2]);
                 float ypos = ((Float) args[3]);
@@ -567,14 +403,14 @@ public class TuioClient implements OSCListener {
                 float maccel = ((Float) args[11]);
                 float raccel = ((Float) args[12]);
 
-                if (blobMap.get(s_id) == null) {
+                if (TuioClient.this.blobMap.get(s_id) == null) {
 
                     TuioBlob addBlob = new TuioBlob(s_id, -1, xpos, ypos, angle, width, height, area);
                     frameBlobs.add(addBlob);
 
                 } else {
 
-                    TuioBlob tblb = blobMap.get(s_id);
+                    TuioBlob tblb = TuioClient.this.blobMap.get(s_id);
                     if (tblb == null) {
                         return;
                     }
@@ -602,11 +438,11 @@ public class TuioClient implements OSCListener {
 
                 // remove the remaining blobs
                 for (Long aliveBlobList1 : aliveBlobList) {
-                    TuioBlob removeBlob = blobMap.get(aliveBlobList1);
+                    TuioBlob removeBlob = TuioClient.this.blobMap.get(aliveBlobList1);
                     if (removeBlob == null) {
                         continue;
                     }
-                    removeBlob.remove(currentTime);
+                    removeBlob.remove(TuioClient.this.currentTime);
                     frameBlobs.add(removeBlob);
                 }
 
@@ -615,16 +451,16 @@ public class TuioClient implements OSCListener {
                 boolean lateFrame = false;
 
                 if (fseq > 0) {
-                    if (fseq > currentFrame) {
-                        currentTime = TuioTime.getSessionTime();
+                    if (fseq > TuioClient.this.currentFrame) {
+                        TuioClient.this.currentTime = TuioTime.getSessionTime();
                     }
-                    if ((fseq >= currentFrame) || ((currentFrame - fseq) > 100)) {
-                        currentFrame = fseq;
+                    if ((fseq >= TuioClient.this.currentFrame) || ((TuioClient.this.currentFrame - fseq) > 100)) {
+                        TuioClient.this.currentFrame = fseq;
                     } else {
                         lateFrame = true;
                     }
-                } else if (TuioTime.getSessionTime().subtract(currentTime).getTotalMilliseconds() > 100) {
-                    currentTime = TuioTime.getSessionTime();
+                } else if (TuioTime.getSessionTime().subtract(TuioClient.this.currentTime).getTotalMilliseconds() > 100) {
+                    TuioClient.this.currentTime = TuioTime.getSessionTime();
                 }
                 if (!lateFrame) {
 
@@ -632,16 +468,16 @@ public class TuioClient implements OSCListener {
                         switch (tblb.getTuioState()) {
                             case TuioBlob.TUIO_REMOVED:
                                 TuioBlob removeBlob = tblb;
-                                removeBlob.remove(currentTime);
+                                removeBlob.remove(TuioClient.this.currentTime);
 
-                                listenerList.fire().removeTuioBlob(removeBlob);
+                                TuioClient.this.listenerList.fire().removeTuioBlob(removeBlob);
 
-                                blobMap.remove((Long) removeBlob.getSessionID());
+                                TuioClient.this.blobMap.remove((Long) removeBlob.getSessionID());
 
                                 if (removeBlob.getBlobID() == maxBlobID) {
                                     maxBlobID = -1;
-                                    if (blobMap.size() > 0) {
-                                        for (TuioBlob tb : blobMap.values()) {
+                                    if (TuioClient.this.blobMap.size() > 0) {
+                                        for (TuioBlob tb : TuioClient.this.blobMap.values()) {
                                             int b_id = tb.getBlobID();
                                             if (b_id > maxBlobID) {
                                                 maxBlobID = b_id;
@@ -664,8 +500,8 @@ public class TuioClient implements OSCListener {
                                 break;
 
                             case TuioBlob.TUIO_ADDED:
-                                int b_id = blobMap.size();
-                                if ((blobMap.size() <= maxBlobID) && (freeBlobList.size() > 0)) {
+                                int b_id = TuioClient.this.blobMap.size();
+                                if ((TuioClient.this.blobMap.size() <= maxBlobID) && (freeBlobList.size() > 0)) {
                                     TuioBlob closestBlob = freeBlobList.get(0);
                                     for (TuioBlob testBlob : freeBlobList) {
                                         if (testBlob.getDistance(tblb) < closestBlob.getDistance(tblb)) {
@@ -678,25 +514,25 @@ public class TuioClient implements OSCListener {
                                     maxBlobID = b_id;
                                 }
 
-                                TuioBlob addBlob = new TuioBlob(currentTime, tblb.getSessionID(), b_id, tblb.getX(), tblb.getY(), tblb.getAngle(), tblb.getWidth(), tblb.getHeight(), tblb.getArea());
-                                blobMap.put(addBlob.getSessionID(), addBlob);
+                                TuioBlob addBlob = new TuioBlob(TuioClient.this.currentTime, tblb.getSessionID(), b_id, tblb.getX(), tblb.getY(), tblb.getAngle(), tblb.getWidth(), tblb.getHeight(), tblb.getArea());
+                                TuioClient.this.blobMap.put(addBlob.getSessionID(), addBlob);
 
-                                listenerList.fire().addTuioBlob(addBlob);
+                                TuioClient.this.listenerList.fire().addTuioBlob(addBlob);
                                 break;
 
                             default:
-                                TuioBlob updateBlob = blobMap.get(tblb.getSessionID());
+                                TuioBlob updateBlob = TuioClient.this.blobMap.get(tblb.getSessionID());
                                 if ((tblb.getX() != updateBlob.getX() && tblb.getXSpeed() == 0) || (tblb.getY() != updateBlob.getY() && tblb.getYSpeed() == 0)) {
-                                    updateBlob.update(currentTime, tblb.getX(), tblb.getY(), tblb.getAngle(), tblb.getWidth(), tblb.getHeight(), tblb.getArea());
+                                    updateBlob.update(TuioClient.this.currentTime, tblb.getX(), tblb.getY(), tblb.getAngle(), tblb.getWidth(), tblb.getHeight(), tblb.getArea());
                                 } else {
-                                    updateBlob.update(currentTime, tblb.getX(), tblb.getY(), tblb.getAngle(), tblb.getWidth(), tblb.getHeight(), tblb.getArea(), tblb.getXSpeed(), tblb.getYSpeed(), tblb.getRotationSpeed(), tblb.getMotionAccel(), tblb.getRotationAccel());
+                                    updateBlob.update(TuioClient.this.currentTime, tblb.getX(), tblb.getY(), tblb.getAngle(), tblb.getWidth(), tblb.getHeight(), tblb.getArea(), tblb.getXSpeed(), tblb.getYSpeed(), tblb.getRotationSpeed(), tblb.getMotionAccel(), tblb.getRotationAccel());
                                 }
 
-                                listenerList.fire().updateTuioBlob(updateBlob);
+                                TuioClient.this.listenerList.fire().updateTuioBlob(updateBlob);
                         }
                     }
 
-                    listenerList.fire().refresh(new TuioTime(currentTime, fseq));
+                    TuioClient.this.listenerList.fire().refresh(new TuioTime(TuioClient.this.currentTime, fseq));
 
                     aliveBlobList.clear();
                     aliveBlobList.addAll(newBlobList);
@@ -705,7 +541,163 @@ public class TuioClient implements OSCListener {
 
                 frameBlobs.clear();
             }
-
         }
+    }
+
+    /**
+     * The default constructor creates a client that listens to the default TUIO
+     * port 3333.
+     */
+    public TuioClient() {
+    }
+
+    /**
+     * This constructor creates a client that listens to the provided port.
+     *
+     * @param port the listening port number
+     */
+    public TuioClient(int port) {
+        this.port = port;
+    }
+
+    /**
+     * The TuioClient starts listening to TUIO messages on the configured UDP
+     * port All received TUIO messages are decoded and the resulting TUIO events
+     * are broadcasted to all registered TuioListeners.
+     */
+    public void connect() {
+
+        TuioTime.initSession();
+        currentTime = new TuioTime();
+        currentTime.reset();
+
+        try {
+            oscPort = new OSCPortIn(port);
+            oscPort.addListener("/tuio/2Dobj", new ObjListener2D());
+            oscPort.addListener("/tuio/2Dcur", new CurListener2D());
+            oscPort.addListener("/tuio/2Dblb", new BlobListener2D());
+            oscPort.startListening();
+            connected = true;
+        } catch (Exception e) {
+            System.out.println("TuioClient: failed to connect to port " + port);
+            connected = false;
+        }
+    }
+
+    /**
+     * The TuioClient stops listening to TUIO messages on the configured UDP
+     * port.
+     */
+    public void disconnect() {
+        oscPort.stopListening();
+        try {
+            Thread.sleep(100);
+        } catch (Exception e) {
+        }
+        oscPort.close();
+        connected = false;
+    }
+
+    /**
+     * Returns true if this TuioClient is currently connected.
+     *
+     * @return	true if this TuioClient is currently connected
+     */
+    public boolean isConnected() {
+        return connected;
+    }
+
+    /**
+     * Adds the provided TuioListener to the list of registered TUIO event
+     * listeners.
+     *
+     * @param listener the TuioListener to add
+     */
+    public void addTuioListener(TuioListener listener) {
+        listenerList.addListener(listener);
+    }
+
+    /**
+     * Removes the provided TuioListener from the list of registered TUIO event
+     * listeners.
+     *
+     * @param listener the TuioListener to remove
+     */
+    public void removeTuioListener(TuioListener listener) {
+        listenerList.removeListener(listener);
+    }
+
+    /**
+     * Removes all TuioListener from the list of registered TUIO event
+     * listeners.
+     */
+    public void removeAllTuioListeners() {
+        TuioListener[] listeners = listenerList.getListeners();
+        for (TuioListener l : listeners) {
+            listenerList.removeListener(l);
+        }
+    }
+
+    /**
+     * Returns an ArrayList of all currently active TuioObjects.
+     *
+     * @return an ArrayList of all currently active TuioObjects
+     */
+    public List<TuioObject> getTuioObjectList() {
+        return new ArrayList<TuioObject>(objectMap.values());
+    }
+
+    /**
+     * Returns an ArrayList of all currently active TuioCursors.
+     *
+     * @return an ArrayList of all currently active TuioCursors
+     */
+    public List<TuioCursor> getTuioCursorList() {
+        return new ArrayList<TuioCursor>(cursorMap.values());
+    }
+
+    /**
+     * Returns an ArrayList of all currently active TuioBlobs.
+     *
+     * @return an ArrayList of all currently active TuioBlobs
+     */
+    public List<TuioBlob> getTuioBlobList() {
+        return new ArrayList<TuioBlob>(blobMap.values());
+    }
+
+    /**
+     * Returns the TuioObject corresponding to the provided Session ID or NULL
+     * if the Session ID does not refer to an active TuioObject.
+     *
+     * @param	s_id	the Session ID of the required TuioObject
+     * @return an active TuioObject corresponding to the provided Session ID or
+     * NULL
+     */
+    public TuioObject getTuioObject(long s_id) {
+        return objectMap.get(s_id);
+    }
+
+    /**
+     * Returns the TuioCursor corresponding to the provided Session ID or NULL
+     * if the Session ID does not refer to an active TuioCursor.
+     *
+     * @param	s_id	the Session ID of the required TuioCursor
+     * @return an active TuioCursor corresponding to the provided Session ID or
+     * NULL
+     */
+    public TuioCursor getTuioCursor(long s_id) {
+        return cursorMap.get(s_id);
+    }
+
+    /**
+     * Returns the TuioBlob corresponding to the provided Session ID or NULL if
+     * the Session ID does not refer to an active TuioBlob.
+     *
+     * @param	s_id	the Session ID of the required TuioBlob
+     * @return an active TuioBlob corresponding to the provided Session ID or
+     * NULL
+     */
+    public TuioBlob getTuioBlob(long s_id) {
+        return blobMap.get(s_id);
     }
 }
