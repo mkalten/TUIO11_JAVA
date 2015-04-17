@@ -308,7 +308,7 @@ public class TuioClient {
                                             }
                                         }
 
-                                        for (TuioCursor tc : new ArrayList<TuioCursor>(TuioClient.this.cursorMap.values())) {
+                                        for (TuioCursor tc : new ArrayList<TuioCursor>(freeCursorList)) {
                                             int c_id = tc.getCursorID();
                                             if (c_id >= maxCursorID) {
                                                 freeCursorList.remove(tc);
