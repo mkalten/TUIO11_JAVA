@@ -3,12 +3,99 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.artistech</groupId>
     <artifactId>tuio-lib</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1.1</version>
     <packaging>jar</packaging>
     <name>tuio-lib</name>
-    <url>http://tuio.org/</url>
+    <url>https://github.com/artistech-inc/TUIO11_JAVA</url>
     <description>TUIO 1.1 Java Reference Implementation</description>
+    <developers>
+        <developer>
+            <id>ZenHarbinger</id>
+            <name>Matthew Aguirre</name>
+            <email>matt.aguirre@gmail.com</email>
+            <url>https://github.com/ZenHarbinger/</url>
+            <organization>tros</organization>
+            <organizationUrl>http://artistech.com/</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>America/New_York</timezone>
+        </developer>
+    </developers>
+    <licenses>
+        <license>
+            <name>GNU LESSER GENERAL PUBLIC LICENSE, Version 3</name>
+            <url>https://www.gnu.org/licenses/lgpl.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <issueManagement>
+        <system>Github</system>
+        <url>https://github.com/artistech-inc/TUIO11_JAVA/issues</url>
+    </issueManagement>
+    <scm>
+        <connection>scm:git:git://github.com/artistech-inc/TUIO11_JAVA.git</connection>
+        <developerConnection>scm:git:git@github.com/artistech-inc/TUIO11_JAVA.git</developerConnection>
+        <url>https://github.com/artistech-inc/TUIO11_JAVA</url>
+    </scm>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+    </distributionManagement>
     <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>demo</id>
             <build>

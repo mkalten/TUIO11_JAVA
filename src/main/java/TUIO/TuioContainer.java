@@ -160,7 +160,7 @@ abstract class TuioContainer extends TuioPoint {
     /**
      * Takes a TuioTime argument and assigns it along with the provided X and Y
      * coordinate to the private TuioContainer attributes. The speed and
-     * accleration values are calculated accordingly.
+     * acceleration values are calculated accordingly.
      *
      * @param	ttime	the TuioTime to assign
      * @param	xp	the X coordinate to assign
@@ -357,7 +357,8 @@ abstract class TuioContainer extends TuioPoint {
     }
 
     /**
-     * Sets the maximum path length param	the maximum path length
+     * Sets the maximum path length parameter
+     * the maximum path length
      */
     public static void setMaxPathLength(int length) {
         MAX_PATH_LENGTH = length;

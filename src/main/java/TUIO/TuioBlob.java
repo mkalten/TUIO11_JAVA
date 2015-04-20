@@ -195,7 +195,7 @@ public class TuioBlob extends TuioContainer {
     /**
      * Takes a TuioTime argument and assigns it along with the provided X and Y
      * coordinate and angle to the private TuioBlob attributes. The speed and
-     * accleration values are calculated accordingly.
+     * acceleration values are calculated accordingly.
      *
      * @param	ttime	the TuioTime to assign
      * @param	xp	the X coordinate to assign
