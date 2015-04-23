@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.artistech</groupId>
     <artifactId>tuio-lib</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <packaging>jar</packaging>
     <name>tuio-lib</name>
     <url>https://github.com/artistech-inc/TUIO11_JAVA</url>

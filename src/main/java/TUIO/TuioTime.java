@@ -24,6 +24,8 @@
 
 package TUIO;
 
+import java.io.Serializable;
+
 /**
  * The TuioTime class is a simple structure that is used to represent the time
  * that has elapsed since the session start. The time is internally represented
@@ -38,7 +40,7 @@ package TUIO;
  * @author Martin Kaltenbrunner
  * @version 1.1.0
  */
-public class TuioTime {
+public class TuioTime implements Serializable {
 
     /**
      * the time since session start in seconds
