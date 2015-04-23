@@ -5,6 +5,14 @@ This software is part of reacTIVision, an open source fiducial
 tracking and multi-touch framework based on computer vision. 
 http://reactivision.sourceforge.net/
 
+Modified
+--------
+Modified by Matthew Aguirre <matta@artistech.com>
+
+1. Made the code a Maven project.  Import the OSC library from Maven.
+2. Separated the OSC listener code into 3 different classes.
+3. All classes are now serializable.
+
 Demo Applications:
 ------------------
 This package contains three demo applications which receive
@@ -119,6 +127,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 References:
 -----------
-This application uses the JavaOSC OpenSound Control library.
-See http://www.mat.ucsb.edu/~c.ramakr/illposed/javaosc.html
+This application uses the JavaOSC OpenSound Control library (v 0.2).
+https://github.com/hoijui/JavaOSC
 for more information and the source code.
