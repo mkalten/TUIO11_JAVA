@@ -1,29 +1,27 @@
 /**
- * TUIO Java Console Example
- * Copyright (c) 2005-2014 Martin Kaltenbrunner <martin@tuio.org>
+ * TUIO Java Console Example Copyright (c) 2005-2014 Martin Kaltenbrunner
+ * <martin@tuio.org>
  *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files
- * (the "Software"), to deal in the Software without restriction,
- * including without limitation the rights to use, copy, modify, merge,
- * publish, distribute, sublicense, and/or sell copies of the Software,
- * and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR
- * ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
- * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  * 
  * Modified by Matthew Aguirre <matta@artistech.com>
  */
-
 package TUIO;
 
 /**
@@ -39,6 +37,13 @@ public class TuioCursor extends TuioContainer {
      */
     protected int cursor_id;
 
+    /**
+     * Default constructor. Initialize everything to 0.
+     */
+    public TuioCursor() {
+        super(0, 0, 0);
+    }
+    
     /**
      * This constructor takes a TuioTime argument and assigns it along with the
      * provided Session ID, Cursor ID, X and Y coordinate to the newly created
@@ -89,4 +94,14 @@ public class TuioCursor extends TuioContainer {
         return cursor_id;
     }
 
+    /**
+     * Set the cursor id.  Will only set the value if it is equal-to 0.
+     *
+     * @param value
+     */
+    public void setCursorID(int value) {
+        if (cursor_id == 0) {
+            cursor_id = value;
+        }
+    }
 }

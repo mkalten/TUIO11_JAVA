@@ -8,10 +8,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,6 +22,7 @@
  * 
  * Modified by Matthew Aguirre <matta@artistech.com>
  */
+
 package TUIO;
 
 import java.io.Serializable;
@@ -159,6 +160,15 @@ public class TuioPoint implements Serializable {
     public float getX() {
         return xpos;
     }
+    
+    /**
+     * Set the X value.
+     *
+     * @param value
+     */
+    public void setX(float value) {
+        xpos = value;
+    }
 
     /**
      * Returns the Y coordinate of this TuioPoint.
@@ -167,6 +177,15 @@ public class TuioPoint implements Serializable {
      */
     public float getY() {
         return ypos;
+    }
+    
+    /**
+     * Set the Y value.
+     *
+     * @param value
+     */
+    public void setY(float value) {
+        ypos = value;
     }
 
     /**
@@ -275,6 +294,15 @@ public class TuioPoint implements Serializable {
     public TuioTime getTuioTime() {
         return new TuioTime(currentTime);
     }
+    
+    /**
+     * Set the TUIO time.
+     *
+     * @param value
+     */
+    public void setTuioTime(TuioTime value) {
+        currentTime = value;
+    }
 
     /**
      * Returns the start time of this TuioPoint as TuioTime.
@@ -283,5 +311,14 @@ public class TuioPoint implements Serializable {
      */
     public TuioTime getStartTime() {
         return new TuioTime(startTime);
+    }
+    
+    /**
+     * Set the start time.
+     *
+     * @param value
+     */
+    public void setStartTime(TuioTime value) {
+        startTime = value;
     }
 }

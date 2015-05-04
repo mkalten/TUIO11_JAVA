@@ -9,10 +9,10 @@
  * publish, distribute, sublicense, and/or sell copies of the Software,
  * and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -54,6 +54,13 @@ public class TuioObject extends TuioContainer {
      * Defines the ROTATING state.
      */
     public static final int TUIO_ROTATING = 5;
+
+    /**
+     * Default constructor. Initialize everything to 0.
+     */
+    public TuioObject() {
+        super(0, 0, 0);
+    }
 
     /**
      * This constructor takes a TuioTime argument and assigns it along with the
@@ -229,12 +236,33 @@ public class TuioObject extends TuioContainer {
     }
 
     /**
+     * Set the symbol id. Will only change the value if the current value is
+     * equal-to 0.
+     *
+     * @param value
+     */
+    public void setSymbolID(int value) {
+        if (symbol_id == 0) {
+            symbol_id = value;
+        }
+    }
+
+    /**
      * Returns the rotation angle of this TuioObject.
      *
      * @return	the rotation angle of this TuioObject
      */
     public float getAngle() {
         return angle;
+    }
+
+    /**
+     * Set the angle.
+     *
+     * @param value
+     */
+    public void setAngle(float value) {
+        angle = value;
     }
 
     /**
@@ -256,12 +284,30 @@ public class TuioObject extends TuioContainer {
     }
 
     /**
+     * Set the Rotation Speed.
+     *
+     * @param value
+     */
+    public void setRotationSpeed(float value) {
+        rotation_speed = value;
+    }
+
+    /**
      * Returns the rotation acceleration of this TuioObject.
      *
      * @return	the rotation acceleration of this TuioObject
      */
     public float getRotationAccel() {
         return rotation_accel;
+    }
+
+    /**
+     * Set the Rotation Acceleration.
+     *
+     * @param value
+     */
+    public void setRotationAccel(float value) {
+        rotation_accel = value;
     }
 
     /**

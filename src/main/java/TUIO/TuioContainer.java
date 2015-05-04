@@ -321,12 +321,32 @@ abstract class TuioContainer extends TuioPoint {
     }
 
     /**
+     * Set the Session ID.  Only if the id is currently equal-to 0.
+     *
+     * @param value
+     */
+    public void setSessionID(long value) {
+        if (session_id == 0) {
+            session_id = value;
+        }
+    }
+
+    /**
      * Returns the X velocity of this TuioContainer.
      *
      * @return	the X velocity of this TuioContainer
      */
     public float getXSpeed() {
         return x_speed;
+    }
+
+    /**
+     * Set the X Speed.
+     *
+     * @param value
+     */
+    public void setXSpeed(float value) {
+        x_speed = value;
     }
 
     /**
@@ -339,12 +359,31 @@ abstract class TuioContainer extends TuioPoint {
     }
 
     /**
+     * Set the Y Speed.
+     *
+     * @param value
+     */
+    public void setYSpeed(float value) {
+        y_speed = value;
+    }
+
+    /**
      * Returns the position of this TuioContainer.
      *
      * @return	the position of this TuioContainer
      */
     public TuioPoint getPosition() {
         return new TuioPoint(xpos, ypos);
+    }
+
+    /**
+     * Set the Position.
+     *
+     * @param value
+     */
+    public void setPosition(TuioPoint value) {
+        xpos = value.xpos;
+        ypos = value.ypos;
     }
 
     /**
@@ -357,9 +396,17 @@ abstract class TuioContainer extends TuioPoint {
     }
 
     /**
-     * Sets the maximum path length parameter the maximum path length.
+     * Set the Path.
      *
-     * @param length
+     * @param value
+     */
+    public void setPath(ArrayList<TuioPoint> value) {
+        path.clear();
+        path.addAll(value);
+    }
+
+    /**
+     * Sets the maximum path length parameter the maximum path length
      */
     public static void setMaxPathLength(int length) {
         MAX_PATH_LENGTH = length;
@@ -375,12 +422,30 @@ abstract class TuioContainer extends TuioPoint {
     }
 
     /**
+     * Set the Motion Speed.
+     *
+     * @param value
+     */
+    public void setMotionSpeed(float value) {
+        motion_speed = value;
+    }
+
+    /**
      * Returns the motion acceleration of this TuioContainer.
      *
      * @return	the motion acceleration of this TuioContainer
      */
     public float getMotionAccel() {
         return motion_accel;
+    }
+
+    /**
+     * Set the Motion Acceleration.
+     *
+     * @param value
+     */
+    public void setMotionAccel(float value) {
+        motion_accel = value;
     }
 
     /**
@@ -393,6 +458,15 @@ abstract class TuioContainer extends TuioPoint {
     }
 
     /**
+     * Set the TUIO State.
+     *
+     * @param value
+     */
+    public void setTuioState(int value) {
+        state = value;
+    }
+
+    /**
      * Returns true of this TuioContainer is moving.
      *
      * @return	true of this TuioContainer is moving
@@ -400,4 +474,5 @@ abstract class TuioContainer extends TuioPoint {
     public boolean isMoving() {
         return (state == TUIO_ACCELERATING) || (state == TUIO_DECELERATING);
     }
+
 }

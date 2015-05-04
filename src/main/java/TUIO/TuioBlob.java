@@ -66,13 +66,20 @@ public class TuioBlob extends TuioContainer {
     public static final int TUIO_ROTATING = 5;
 
     /**
+     * Default constructor. Initialize everything to 0.
+     */
+    public TuioBlob() {
+        super(0, 0, 0);
+    }
+
+    /**
      * This constructor takes a TuioTime argument and assigns it along with the
      * provided Session ID, X and Y coordinate, width, height and angle to the
      * newly created TuioBlob.
      *
      * @param	ttime	the TuioTime to assign
      * @param	si	the Session ID to assign
-     * @param   bi
+     * @param bi
      * @param	xp	the X coordinate to assign
      * @param	yp	the Y coordinate to assign
      * @param	a	the angle to assign
@@ -117,8 +124,8 @@ public class TuioBlob extends TuioContainer {
     }
 
     /**
-     * This constructor takes the attributes of the provided TuioBlob and assigns
-     * these values to the newly created TuioBlob.
+     * This constructor takes the attributes of the provided TuioBlob and
+     * assigns these values to the newly created TuioBlob.
      *
      * @param	tblb	the TuioBlob to assign
      */
@@ -276,6 +283,18 @@ public class TuioBlob extends TuioContainer {
     }
 
     /**
+     * Sets the ID of this blob of this TuioBlob. Will only change the value if
+     * the value is equal-to 0
+     *
+     * @param value
+     */
+    public void setBlobID(int value) {
+        if (blob_id == 0) {
+            blob_id = value;
+        }
+    }
+
+    /**
      * Returns the width of this TuioBlob.
      *
      * @return	the width of this TuioBlob
@@ -285,12 +304,30 @@ public class TuioBlob extends TuioContainer {
     }
 
     /**
+     * Sets the width of this TuioBlob.
+     *
+     * @param value
+     */
+    public void setWidth(float value) {
+        width = value;
+    }
+
+    /**
      * Returns the height of this TuioBlob.
      *
      * @return	the height of this TuioBlob
      */
     public float getHeight() {
         return height;
+    }
+
+    /**
+     * Sets the height of this TuioBlob.
+     *
+     * @param value
+     */
+    public void setHeight(float value) {
+        height = value;
     }
 
     /**
@@ -323,12 +360,30 @@ public class TuioBlob extends TuioContainer {
     }
 
     /**
+     * Sets the area of this TuioBlob.
+     *
+     * @param value
+     */
+    public void setArea(float value) {
+        area = value;
+    }
+
+    /**
      * Returns the rotation angle of this TuioBlob.
      *
      * @return	the rotation angle of this TuioBlob
      */
     public float getAngle() {
         return angle;
+    }
+
+    /**
+     * Sets the rotation angle of this TuioBlob.
+     *
+     * @param value
+     */
+    public void setAngle(float value) {
+        angle = value;
     }
 
     /**
@@ -350,12 +405,30 @@ public class TuioBlob extends TuioContainer {
     }
 
     /**
+     * Sets the rotation speed of this TuioBlob.
+     *
+     * @param value
+     */
+    public void setRotationSpeed(float value) {
+        rotation_speed = value;
+    }
+
+    /**
      * Returns the rotation acceleration of this TuioBlob.
      *
      * @return	the rotation acceleration of this TuioBlob
      */
     public float getRotationAccel() {
         return rotation_accel;
+    }
+
+    /**
+     * Sets the rotation acceleration of this TuioBlob.
+     *
+     * @param value
+     */
+    public void getRotationAccel(float value) {
+        rotation_accel = value;
     }
 
     /**
@@ -367,5 +440,4 @@ public class TuioBlob extends TuioContainer {
     public boolean isMoving() {
         return (state == TUIO_ACCELERATING) || (state == TUIO_DECELERATING) || (state == TUIO_ROTATING);
     }
-
 }

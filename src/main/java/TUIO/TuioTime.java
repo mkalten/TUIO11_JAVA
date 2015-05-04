@@ -20,8 +20,6 @@
  * ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- * 
- * Modified by Matthew Aguirre <matta@artistech.com>
  */
 
 package TUIO;
@@ -42,7 +40,7 @@ import java.io.Serializable;
  * @author Martin Kaltenbrunner
  * @version 1.1.0
  */
-public class TuioTime implements Serializable {
+public class TuioTime implements Serializable{
 
     /**
      * the time since session start in seconds
@@ -218,6 +216,15 @@ public class TuioTime implements Serializable {
     public long getSeconds() {
         return seconds;
     }
+    
+    /**
+     * Set the seconds.
+     *
+     * @param value
+     */
+    public void setSeconds(long value) {
+        seconds = value;
+    }
 
     /**
      * Returns the TuioTime Microseconds component.
@@ -226,6 +233,15 @@ public class TuioTime implements Serializable {
      */
     public long getMicroseconds() {
         return micro_seconds;
+    }
+    
+    /**
+     * Set the micro seconds.
+     *
+     * @param value
+     */
+    public void setMicroseconds(long value) {
+        micro_seconds = value;
     }
 
     /**
