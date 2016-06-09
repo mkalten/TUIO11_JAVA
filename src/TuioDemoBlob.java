@@ -1,6 +1,6 @@
 /*
  TUIO Java GUI Demo
- Copyright (c) 2005-2014 Martin Kaltenbrunner <martin@tuio.org>
+ Copyright (c) 2005-2016 Martin Kaltenbrunner <martin@tuio.org>
  
  Permission is hereby granted, free of charge, to any person obtaining
  a copy of this software and associated documentation files
@@ -31,35 +31,36 @@ import TUIO.*;
 
 public class TuioDemoBlob extends TuioBlob {
 
-	private Shape square;
+	private Shape ellipse;
 
 	public TuioDemoBlob(TuioBlob tblb) {
 		super(tblb);
-		int size = TuioDemoComponent.object_size;
-		square = new Rectangle2D.Float(-size/2,-size/2,size,size);
+		float w = tblb.getScreenWidth(TuioDemoComponent.width);
+		float h = tblb.getScreenHeight(TuioDemoComponent.height);
+		ellipse = new Ellipse2D.Float(-w/2,-h/2,w,h);
 		
 		AffineTransform transform = new AffineTransform();
 		transform.translate(xpos,ypos);
 		transform.rotate(angle,xpos,ypos);
-		square = transform.createTransformedShape(square);
+		ellipse = transform.createTransformedShape(ellipse);
 	}
 	
-	public void paint(Graphics2D g, int width, int height) {
+	public void paint(Graphics2D g) {
 	
-		float Xpos = xpos*width;
-		float Ypos = ypos*height;
-		float scale = height/(float)TuioDemoComponent.table_size;
+		float x = xpos*TuioDemoComponent.width;
+		float y = ypos*TuioDemoComponent.height;
+		//float scale = TuioDemoComponent.height/(float)TuioDemoComponent.table_size;
 
 		AffineTransform trans = new AffineTransform();
 		trans.translate(-xpos,-ypos);
-		trans.translate(Xpos,Ypos);
-		trans.scale(scale,scale);
-		Shape s = trans.createTransformedShape(square);
+		trans.translate(x,y);
+		//trans.scale(scale,scale);
+		Shape s = trans.createTransformedShape(ellipse);
 	
 		g.setPaint(Color.black);
 		g.fill(s);
 		g.setPaint(Color.white);
-		g.drawString(blob_id+"",Xpos-10,Ypos);
+		g.drawString(blob_id+"",x-10,y);
 	}
 
 	public void update(TuioBlob tblb) {
@@ -68,14 +69,14 @@ public class TuioDemoBlob extends TuioBlob {
 		float dy = tblb.getY() - ypos;
 		float da = tblb.getAngle() - angle;
 
-		if ((dx!=0) || (dy!=0)) {
-			AffineTransform trans = AffineTransform.getTranslateInstance(dx,dy);
-			square = trans.createTransformedShape(square);
+		if (da!=0) {
+			AffineTransform trans = AffineTransform.getRotateInstance(da,xpos,ypos);
+			ellipse = trans.createTransformedShape(ellipse);
 		}
 		
-		if (da!=0) {
-			AffineTransform trans = AffineTransform.getRotateInstance(da,tblb.getX(),tblb.getY());
-			square = trans.createTransformedShape(square);
+		if ((dx!=0) || (dy!=0)) {
+			AffineTransform trans = AffineTransform.getTranslateInstance(dx,dy);
+			ellipse = trans.createTransformedShape(ellipse);
 		}
 
 		super.update(tblb);

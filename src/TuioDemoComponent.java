@@ -1,6 +1,6 @@
 /*
  TUIO Java GUI Demo
- Copyright (c) 2005-2014 Martin Kaltenbrunner <martin@tuio.org>
+ Copyright (c) 2005-2016 Martin Kaltenbrunner <martin@tuio.org>
  
  Permission is hereby granted, free of charge, to any person obtaining
  a copy of this software and associated documentation files
@@ -176,7 +176,14 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
 		Enumeration<TuioDemoObject> objects = objectList.elements();
 		while (objects.hasMoreElements()) {
 			TuioDemoObject tobj = objects.nextElement();
-			if (tobj!=null) tobj.paint(g2, width,height);
-		}		
+			if (tobj!=null) tobj.paint(g2);
+		}
+		
+		// draw the blobs
+		Enumeration<TuioDemoBlob> blobs = blobList.elements();
+		while (blobs.hasMoreElements()) {
+			TuioDemoBlob tblb = blobs.nextElement();
+			if (tblb!=null) tblb.paint(g2);
+		}
 	}
 }

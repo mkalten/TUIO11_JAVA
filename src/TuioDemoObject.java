@@ -1,6 +1,6 @@
 /*
  TUIO Java GUI Demo
- Copyright (c) 2005-2014 Martin Kaltenbrunner <martin@tuio.org>
+ Copyright (c) 2005-2016 Martin Kaltenbrunner <martin@tuio.org>
  
  Permission is hereby granted, free of charge, to any person obtaining
  a copy of this software and associated documentation files
@@ -44,22 +44,22 @@ public class TuioDemoObject extends TuioObject {
 		square = transform.createTransformedShape(square);
 	}
 	
-	public void paint(Graphics2D g, int width, int height) {
+	public void paint(Graphics2D g) {
 	
-		float Xpos = xpos*width;
-		float Ypos = ypos*height;
-		float scale = height/(float)TuioDemoComponent.table_size;
+		float x = xpos*TuioDemoComponent.width;
+		float y = ypos*TuioDemoComponent.height;
+		float scale = TuioDemoComponent.height/(float)TuioDemoComponent.table_size;
 
 		AffineTransform trans = new AffineTransform();
 		trans.translate(-xpos,-ypos);
-		trans.translate(Xpos,Ypos);
+		trans.translate(x,y);
 		trans.scale(scale,scale);
 		Shape s = trans.createTransformedShape(square);
 	
 		g.setPaint(Color.black);
 		g.fill(s);
 		g.setPaint(Color.white);
-		g.drawString(symbol_id+"",Xpos-10,Ypos);
+		g.drawString(symbol_id+"",x-10,y);
 	}
 
 	public void update(TuioObject tobj) {
