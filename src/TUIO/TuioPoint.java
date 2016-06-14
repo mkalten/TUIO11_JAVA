@@ -1,6 +1,6 @@
 /*
  TUIO Java library
- Copyright (c) 2005-2014 Martin Kaltenbrunner <martin@tuio.org>
+ Copyright (c) 2005-2016 Martin Kaltenbrunner <martin@tuio.org>
  
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -17,15 +17,16 @@
 */
 
 package TUIO;
+import java.io.Serializable;
 
 /**
  * The TuioPoint class on the one hand is a simple container and utility class to handle TUIO positions in general, 
  * on the other hand the TuioPoint is the base class for the TuioCursor and TuioObject classes.
  *
  * @author Martin Kaltenbrunner
- * @version 1.1.0
+ * @version 1.1.6
  */ 
-public class TuioPoint {
+public class TuioPoint implements Serializable {
 	
 	/**
 	 * X coordinate, representated as a floating point value in a range of 0..1  

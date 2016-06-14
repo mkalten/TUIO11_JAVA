@@ -1,6 +1,6 @@
 /*
  TUIO Java library
- Copyright (c) 2005-2014 Martin Kaltenbrunner <martin@tuio.org>
+ Copyright (c) 2005-2016 Martin Kaltenbrunner <martin@tuio.org>
  
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -32,7 +32,7 @@ import java.util.*;
  * </code>
  *
  * @author Martin Kaltenbrunner
- * @version 1.1.0
+ * @version 1.1.6
  */ 
 public class TuioClient implements OSCListener {
 	
@@ -457,8 +457,8 @@ public class TuioClient implements OSCListener {
 										
 										Enumeration<TuioCursor> flist = freeCursorList.elements();
 										while (flist.hasMoreElements()) {
-											int c_id = flist.nextElement().getCursorID();
-											if (c_id>=maxCursorID) freeCursorList.removeElement(c_id);
+											TuioCursor fcur = flist.nextElement();
+											if (fcur.getCursorID()>=maxCursorID) freeCursorList.removeElement(fcur);
 										}
 									} else freeCursorList.clear();
 								} else if (removeCursor.getCursorID()<maxCursorID) {
@@ -616,8 +616,8 @@ public class TuioClient implements OSCListener {
 										
 										Enumeration<TuioBlob> flist = freeBlobList.elements();
 										while (flist.hasMoreElements()) {
-											int b_id = flist.nextElement().getBlobID();
-											if (b_id>=maxBlobID) freeBlobList.removeElement(b_id);
+											TuioBlob fblb = flist.nextElement();
+											if (fblb.getBlobID()>=maxBlobID) freeBlobList.removeElement(fblb);
 										}
 									} else freeBlobList.clear();
 								} else if (removeBlob.getBlobID()<maxBlobID) {

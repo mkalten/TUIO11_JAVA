@@ -1,6 +1,6 @@
 /*
  TUIO Java library
- Copyright (c) 2005-2014 Martin Kaltenbrunner <martin@tuio.org>
+ Copyright (c) 2005-2016 Martin Kaltenbrunner <martin@tuio.org>
  
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -17,6 +17,7 @@
 */
 
 package TUIO;
+import java.io.Serializable;
 
 /**
  * The TuioTime class is a simple structure that is used to reprent the time that has elapsed since the session start.
@@ -26,9 +27,9 @@ package TUIO;
  * The class also provides various addtional convience method, which allow some simple time arithmetics.
  *
  * @author Martin Kaltenbrunner
- * @version 1.1.0
+ * @version 1.1.6
  */ 
-public class TuioTime {
+public class TuioTime implements Serializable {
 
 	/**
 	 * the time since session start in seconds  

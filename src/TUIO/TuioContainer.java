@@ -1,6 +1,6 @@
 /*
  TUIO Java library
- Copyright (c) 2005-2014 Martin Kaltenbrunner <martin@tuio.org>
+ Copyright (c) 2005-2016 Martin Kaltenbrunner <martin@tuio.org>
  
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -25,7 +25,7 @@ import java.util.concurrent.LinkedBlockingDeque;
  * The abstract TuioContainer class defines common attributes that apply to both subclasses {@link TuioObject} and {@link TuioCursor}.
  *
  * @author Martin Kaltenbrunner
- * @version 1.1.0
+ * @version 1.1.6
  */ 
 abstract class TuioContainer extends TuioPoint {
 	
