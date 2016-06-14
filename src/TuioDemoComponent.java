@@ -34,7 +34,7 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
 
 	private Hashtable<Long,TuioObject> objectList = new Hashtable<Long,TuioObject>();
 	private Hashtable<Long,TuioCursor> cursorList = new Hashtable<Long,TuioCursor>();
-	private Hashtable<Long,TuioBlob> blobList = new Hashtable<Long,TuioBlob>();
+	private Hashtable<Long,TuioBlob>   blobList   = new Hashtable<Long,TuioBlob>();
 
 	public static final int finger_size = 18;
 	public static final int object_size = 60;
@@ -45,7 +45,7 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
 	public boolean verbose = false;
 	
 	Color bgrColor = new Color(0,0,64);
-	Color curColor = new Color(64,0,64);
+	Color curColor = new Color(192,0,192);
 	Color objColor = new Color(64,0,0);
 	Color blbColor = new Color(64,64,64);
 		
@@ -159,7 +159,7 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
 			g2.setPaint(curColor);
 			int s = (int)(scale*finger_size);
 			g2.fillOval(current_point.getScreenX(w-s/2),current_point.getScreenY(h-s/2),s,s);
-			g2.setPaint(Color.black);
+			g2.setPaint(Color.white);
 			g2.drawString(tcur.getCursorID()+"",current_point.getScreenX(w),current_point.getScreenY(h));
 		}
 
