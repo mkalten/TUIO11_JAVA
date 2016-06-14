@@ -1,6 +1,6 @@
 TUIO JAVA LIBRARY AND EXAMPLES
 ------------------------------
-Copyright (c) 2005-2014 Martin Kaltenbrunner <martin@tuio.org>
+Copyright (c) 2005-2016 Martin Kaltenbrunner <martin@tuio.org>
 This software is part of reacTIVision, an open source fiducial
 tracking and multi-touch framework based on computer vision. 
 http://reactivision.sourceforge.net/
@@ -120,5 +120,5 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 References:
 -----------
 This application uses the JavaOSC OpenSound Control library.
-See http://www.mat.ucsb.edu/~c.ramakr/illposed/javaosc.html
+See http://www.illposed.com/software/javaosc.html
 for more information and the source code.
