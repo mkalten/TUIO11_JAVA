@@ -32,18 +32,23 @@ import TUIO.*;
 
 public class TuioDemoComponent extends JComponent implements TuioListener {
 
-	private Hashtable<Long,TuioDemoObject> objectList = new Hashtable<Long,TuioDemoObject>();
+	private Hashtable<Long,TuioObject> objectList = new Hashtable<Long,TuioObject>();
 	private Hashtable<Long,TuioCursor> cursorList = new Hashtable<Long,TuioCursor>();
-	private Hashtable<Long,TuioDemoBlob> blobList = new Hashtable<Long,TuioDemoBlob>();
+	private Hashtable<Long,TuioBlob> blobList = new Hashtable<Long,TuioBlob>();
 
-	public static final int finger_size = 15;
+	public static final int finger_size = 18;
 	public static final int object_size = 60;
 	public static final int table_size = 760;
 	
 	public static int width, height;
 	private float scale = 1.0f;
 	public boolean verbose = false;
-			
+	
+	Color bgrColor = new Color(0,0,64);
+	Color curColor = new Color(64,0,64);
+	Color objColor = new Color(64,0,0);
+	Color blbColor = new Color(64,64,64);
+		
 	public void setSize(int w, int h) {
 		super.setSize(w,h);
 		width = w;
@@ -52,17 +57,13 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
 	}
 	
 	public void addTuioObject(TuioObject tobj) {
-		TuioDemoObject demo = new TuioDemoObject(tobj);
-		objectList.put(tobj.getSessionID(),demo);
+		objectList.put(tobj.getSessionID(),tobj);
 
 		if (verbose) 
 			System.out.println("add obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+") "+tobj.getX()+" "+tobj.getY()+" "+tobj.getAngle());	
 	}
 
 	public void updateTuioObject(TuioObject tobj) {
-
-		TuioDemoObject demo = (TuioDemoObject)objectList.get(tobj.getSessionID());
-		demo.update(tobj);
 		
 		if (verbose) 
 			System.out.println("set obj "+tobj.getSymbolID()+" ("+tobj.getSessionID()+") "+tobj.getX()+" "+tobj.getY()+" "+tobj.getAngle()+" "+tobj.getMotionSpeed()+" "+tobj.getRotationSpeed()+" "+tobj.getMotionAccel()+" "+tobj.getRotationAccel()); 	
@@ -77,18 +78,13 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
 
 	public void addTuioCursor(TuioCursor tcur) {
 	
-		if (!cursorList.containsKey(tcur.getSessionID())) {
-			cursorList.put(tcur.getSessionID(), tcur);
-			repaint();
-		}
-		
+		cursorList.put(tcur.getSessionID(), tcur);
+
 		if (verbose) 
 			System.out.println("add cur "+tcur.getCursorID()+" ("+tcur.getSessionID()+") "+tcur.getX()+" "+tcur.getY());	
 	}
 
 	public void updateTuioCursor(TuioCursor tcur) {
-
-		repaint();
 		
 		if (verbose) 
 			System.out.println("set cur "+tcur.getCursorID()+" ("+tcur.getSessionID()+") "+tcur.getX()+" "+tcur.getY()+" "+tcur.getMotionSpeed()+" "+tcur.getMotionAccel()); 
@@ -97,24 +93,19 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
 	public void removeTuioCursor(TuioCursor tcur) {
 	
 		cursorList.remove(tcur.getSessionID());	
-		repaint();
 		
 		if (verbose) 
 			System.out.println("del cur "+tcur.getCursorID()+" ("+tcur.getSessionID()+")"); 
 	}
 
 	public void addTuioBlob(TuioBlob tblb) {
-		TuioDemoBlob demo = new TuioDemoBlob(tblb);
-		blobList.put(tblb.getSessionID(),demo);
+		blobList.put(tblb.getSessionID(),tblb);
 		
 		if (verbose) 
 			System.out.println("add blb "+tblb.getBlobID()+" ("+tblb.getSessionID()+") "+tblb.getX()+" "+tblb.getY()+" "+tblb.getAngle());	
 	}
 	
 	public void updateTuioBlob(TuioBlob tblb) {
-		
-		TuioDemoBlob demo = (TuioDemoBlob)blobList.get(tblb.getSessionID());
-		demo.update(tblb);
 		
 		if (verbose) 
 			System.out.println("set blb "+tblb.getBlobID()+" ("+tblb.getSessionID()+") "+tblb.getX()+" "+tblb.getY()+" "+tblb.getAngle()+" "+tblb.getMotionSpeed()+" "+tblb.getRotationSpeed()+" "+tblb.getMotionAccel()+" "+tblb.getRotationAccel()); 	
@@ -142,7 +133,7 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 	
-		g2.setColor(Color.white);
+		g2.setColor(bgrColor);
 		g2.fillRect(0,0,width,height);
 	
 		int w = (int)Math.round(width-scale*finger_size/2.0f);
@@ -165,7 +156,7 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
 			}
 			
 			// draw the finger tip
-			g2.setPaint(Color.lightGray);
+			g2.setPaint(curColor);
 			int s = (int)(scale*finger_size);
 			g2.fillOval(current_point.getScreenX(w-s/2),current_point.getScreenY(h-s/2),s,s);
 			g2.setPaint(Color.black);
@@ -173,17 +164,49 @@ public class TuioDemoComponent extends JComponent implements TuioListener {
 		}
 
 		// draw the objects
-		Enumeration<TuioDemoObject> objects = objectList.elements();
+		Enumeration<TuioObject> objects = objectList.elements();
 		while (objects.hasMoreElements()) {
-			TuioDemoObject tobj = objects.nextElement();
-			if (tobj!=null) tobj.paint(g2);
+			TuioObject tobj = objects.nextElement();
+			if (tobj!=null) {
+			
+				float ox = tobj.getScreenX(width);
+				float oy = tobj.getScreenY(height);	
+				float size = object_size*(height/(float)table_size);
+						
+				Rectangle2D square = new Rectangle2D.Float(-size/2,-size/2,size,size);
+		
+				AffineTransform transform = new AffineTransform();
+				transform.rotate(tobj.getAngle(),ox,oy);
+				transform.translate(ox,oy);
+
+				g2.setPaint(objColor);
+				g2.fill(transform.createTransformedShape(square));
+				g2.setPaint(Color.white);
+				g2.drawString(tobj.getSymbolID()+"",ox-10,oy);
+			}
 		}
 		
 		// draw the blobs
-		Enumeration<TuioDemoBlob> blobs = blobList.elements();
+		Enumeration<TuioBlob> blobs = blobList.elements();
 		while (blobs.hasMoreElements()) {
-			TuioDemoBlob tblb = blobs.nextElement();
-			if (tblb!=null) tblb.paint(g2);
+			TuioBlob tblb = blobs.nextElement();
+			if (tblb!=null) {
+			
+				float bx = tblb.getScreenX(width);
+				float by = tblb.getScreenY(height);
+				float bw = tblb.getScreenWidth(width);
+				float bh = tblb.getScreenHeight(height);
+				Ellipse2D ellipse = new Ellipse2D.Float(-bw/2.0f,-bh/2.0f,bw,bh);
+		
+				AffineTransform transform = new AffineTransform();
+				transform.rotate(tblb.getAngle(),bx,by);
+				transform.translate(bx,by);
+
+				g2.setPaint(blbColor);
+				g2.fill(transform.createTransformedShape(ellipse));
+				g2.setPaint(Color.white);
+				g2.drawString(tblb.getBlobID()+"",bx-10,by);
+			}
 		}
 	}
 }
