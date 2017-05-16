@@ -317,7 +317,7 @@ abstract class TuioContainer extends TuioPoint {
 	
 	/**
 	 * Sets the maximum path length
-	 * param	the maximum path length
+	 * @param	length	the maximum path length
 	 */
 	public static void setMaxPathLength(int length) {
 		MAX_PATH_LENGTH = length;
