@@ -24,12 +24,12 @@
 
 import java.applet.*;
 import java.awt.*;
-import javax.swing.*;
 import java.io.*;
 import java.net.*;
 import TUIO.*;
 
-public class TuioApplet extends JApplet {
+@SuppressWarnings({"deprecation", "removal"})
+public class TuioApplet extends Applet {
 	
 	TuioDemoComponent demo;
 	TuioClient client;
