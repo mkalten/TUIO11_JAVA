@@ -157,7 +157,7 @@ public class OSCByteArrayToJavaConverter {
 	 * @return a Character
 	 */
 	private Object readChar() {
-		return new Character((char) bytes[streamPosition++]);
+		return Character.valueOf((char) bytes[streamPosition++]);
 	}
 
 	/**
@@ -183,7 +183,7 @@ public class OSCByteArrayToJavaConverter {
 			((floatBytes[1] & 0xFF) << 16) +
 			((floatBytes[0] & 0xFF) << 24);
 		
-		return new Float(Float.intBitsToFloat(floatBits));
+		return Float.valueOf(Float.intBitsToFloat(floatBits));
 	}
 
 	/**
@@ -202,7 +202,7 @@ public class OSCByteArrayToJavaConverter {
 			((intBytes[1] & 0xFF) << 16) +
 			((intBytes[0] & 0xFF) << 24);
 		
-		return new Integer(intBits);
+		return Integer.valueOf(intBits);
 	}
 
 	/**
@@ -220,8 +220,8 @@ public class OSCByteArrayToJavaConverter {
 			((intBytes[2] & 0xFF) << 8) +
 			((intBytes[1] & 0xFF) << 16) +
 			((intBytes[0] & 0xFF) << 24);
-		
-		return new Integer(intBits);
+
+		return Integer.valueOf(intBits);		
 	}
 	
 	/**
