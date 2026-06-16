@@ -1,9 +1,9 @@
 TUIO JAVA LIBRARY AND EXAMPLES
 ------------------------------
-Copyright (c) 2005-2016 Martin Kaltenbrunner <martin@tuio.org>
+Copyright (c) 2005-2026 Martin Kaltenbrunner <martin@tuio.org>
 This software is part of reacTIVision, an open source fiducial
 tracking and multi-touch framework based on computer vision. 
-http://reactivision.sourceforge.net/
+https://github.com/mkalten/reacTIVision
 
 Demo Applications:
 ------------------
@@ -13,7 +13,6 @@ All these applications show how to use the TUIO Java Library
 in a simple way.
 
 TuioDemo graphically displays the object and cursor state,
-TuioApplet is a version of TuioDemo for the web browser,
 TuioDump prints the object and cursor state to the console.
 
 You can use these demo applications for debugging purposes, 
