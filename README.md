@@ -19,9 +19,13 @@ This software is part of reacTIVision, an open source fiducial tracking and mult
 The project is built with Maven 3 and targets Java 8:
 
 ```bash
-mvn test      # run the test suite
-mvn package   # build target/libTUIO.jar and target/TuioDemo.jar
+mvn test                    # run the test suite
+mvn package                 # build target/libTUIO.jar and target/TuioDemo.jar
+mvn javadoc:javadoc         # generate the API documentation in target/reports/apidocs/
+mvn javadoc:javadoc@osc     # generate the OSC codec docs in target/reports/osc/apidocs/
 ```
+
+Wrapper scripts for the documentation builds are also provided in `bin/` (`bin/tuiodoc`, `bin/oscdoc`).
 
 `libTUIO.jar` contains the library only; `TuioDemo.jar` is an executable jar bundling the demo applications.
 
@@ -98,10 +102,11 @@ server.commitFrame();
 - **TuioDump** — prints all TUIO events to the console.
 - **TuioDemo** — graphically displays the object and cursor state.
   `F1` toggles fullscreen, `V` prints TUIO events, `ESC` quits.
-**SimpleSimulator** — generates TUIO messages with mouse input.
-  Shift-drag keeps cursors alive, ctrl-drag moves a joint group;
-  `h`/`v`/`r` invert axes/rotation, `f`/`p` toggle filtering and
-  periodic/full-update mode.
+- **SimpleSimulator** — generates TUIO messages with mouse input.
+  Shift-click creates a cursor that stays alive, ctrl-click toggles
+  joint-group membership on sticky cursors; `F`/`P` toggle
+  full-update and periodic-message modes, `V` toggles verbose output,
+  `H` shows help, `R` resets cursors, `F1` fullscreen, `ESC` quits.
 
 ## License
 

@@ -80,6 +80,51 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.12.0</version>
+        <configuration>
+          <encoding>UTF-8</encoding>
+          <charset>UTF-8</charset>
+          <docencoding>UTF-8</docencoding>
+          <!-- legacy javadoc style; disable strict doclint checks on modern JDKs -->
+          <additionalOptions>
+            <additionalOption>-Xdoclint:none</additionalOption>
+          </additionalOptions>
+          <detectJavaApiLink>true</detectJavaApiLink>
+          <bottom>Copyright (c) 2005-2026 Martin Kaltenbrunner — LGPL</bottom>
+          <!-- the library jar excludes the demo applications in the default package -->
+          <sourceFileExcludes>
+            <exclude>TuioDemo.java</exclude>
+            <exclude>TuioDump.java</exclude>
+            <exclude>SimpleSimulator.java</exclude>
+          </sourceFileExcludes>
+          <!-- the OSC codec is documented separately: mvn javadoc:javadoc@osc -->
+          <excludePackageNames>TUIO.osc</excludePackageNames>
+        </configuration>
+        <executions>
+          <!-- OSC codec documentation: mvn javadoc:javadoc@osc -->
+          <execution>
+            <id>osc</id>
+            <goals><goal>javadoc</goal></goals>
+            <configuration combine.self="override">
+              <encoding>UTF-8</encoding>
+              <charset>UTF-8</charset>
+              <docencoding>UTF-8</docencoding>
+              <additionalOptions>
+                <additionalOption>-Xdoclint:none</additionalOption>
+              </additionalOptions>
+              <detectJavaApiLink>true</detectJavaApiLink>
+              <bottom>Copyright (c) 2005-2026 Martin Kaltenbrunner — LGPL</bottom>
+              <subpackages>TUIO.osc</subpackages>
+              <outputDirectory>${project.build.directory}/reports/osc</outputDirectory>
+              <doctitle>TUIO OSC Codec ${project.version} API</doctitle>
+              <windowtitle>TUIO OSC Codec ${project.version} API</windowtitle>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 </project>
