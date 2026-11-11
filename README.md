@@ -25,8 +25,6 @@ mvn javadoc:javadoc         # generate the API documentation in target/reports/a
 mvn javadoc:javadoc@osc     # generate the OSC codec docs in target/reports/osc/apidocs/
 ```
 
-Wrapper scripts for the documentation builds are also provided in `bin/` (`bin/tuiodoc`, `bin/oscdoc`).
-
 `libTUIO.jar` contains the library only; `TuioDemo.jar` is an executable jar bundling the demo applications.
 
 ## Testing
