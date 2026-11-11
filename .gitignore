@@ -1,2 +1,6 @@
 
 doc
+
+.DS_Store
+
+target/
