@@ -5,12 +5,35 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.tuio</groupId>
-  <artifactId>tuio</artifactId>
+  <artifactId>libtuio</artifactId>
   <version>1.1.6</version>
   <packaging>jar</packaging>
 
   <name>TUIO Library</name>
   <description>TUIO protocol library for Java — OSC codec, client, server and transports</description>
+  <url>https://github.com/mkalten/TUIO11_JAVA</url>
+
+  <licenses>
+    <license>
+      <name>LGPL-3.0-or-later</name>
+      <url>https://www.gnu.org/licenses/lgpl-3.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Martin Kaltenbrunner</name>
+      <email>martin@tuio.org</email>
+      <organizationUrl>https://www.tuio.org/</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:https://github.com/mkalten/TUIO11_JAVA.git</connection>
+    <developerConnection>scm:git:git@github.com:mkalten/TUIO11_JAVA.git</developerConnection>
+    <url>https://github.com/mkalten/TUIO11_JAVA</url>
+  </scm>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -36,6 +59,9 @@
         <version>3.13.0</version>
         <configuration>
           <release>8</release>
+          <compilerArgs>
+            <arg>-Xlint:-options</arg>
+          </compilerArgs>
         </configuration>
       </plugin>
       <plugin>
@@ -68,6 +94,7 @@
             <configuration>
               <finalName>TuioDemo</finalName>
               <appendAssemblyId>false</appendAssemblyId>
+              <attach>false</attach>
               <descriptors>
                 <descriptor>src/assembly/tuio-demo.xml</descriptor>
               </descriptors>
@@ -127,4 +154,83 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>central-release</id>
+      <properties>
+        <central.skipUpload>false</central.skipUpload>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>3.4.0</version>
+            <configuration>
+              <excludes>
+                <exclude>TuioDemo.java</exclude>
+                <exclude>TuioDump.java</exclude>
+                <exclude>SimpleSimulator.java</exclude>
+              </excludes>
+            </configuration>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.12.0</version>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>3.2.8</version>
+            <configuration>
+              <gpgArguments>
+                <arg>--pinentry-mode</arg>
+                <arg>loopback</arg>
+              </gpgArguments>
+            </configuration>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>0.12.0</version>
+            <extensions>true</extensions>
+            <configuration>
+              <publishingServerId>central</publishingServerId>
+              <autoPublish>false</autoPublish>
+              <waitUntil>validated</waitUntil>
+              <skipUpload>${central.skipUpload}</skipUpload>
+              <deploymentName>TUIO Java Library ${project.version}</deploymentName>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
